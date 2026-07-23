@@ -10,6 +10,12 @@ import TrainingCoordinatorLogin from "./Components-Login/TrainingCoordinatorLogi
 import ForgotPassword from "./Components-Login/ForgotPassword";
 import PlacementofficerLogin from "./Components-Login/PlacementofficerLogin";
 import AdminLogin from "./Components-Login/AdminLogin";
+import QuickHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
+import StatCardsPage from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
+import QuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
+import PlacementOfficerHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
+import PlacementOfficerStatCards from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
+import PlacementOfficerQuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
 
 
 const router = createBrowserRouter([
@@ -55,10 +61,14 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-   <DataProvider>
-    <RouterProvider router={router}/>
-   </DataProvider>
-  )
+    <>
+      <PlacementOfficerHeader />
+      <PlacementOfficerStatCards />
+      <PlacementOfficerQuickActionsPage />
+    </>
+  );
 }
 
-export default App
+export default App;
+
+
