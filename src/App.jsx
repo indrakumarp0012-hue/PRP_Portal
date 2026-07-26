@@ -8,15 +8,15 @@ import StudentLogin from "./Components-Login/StudentLogin";
 import RecruiterLogin from "./Components-Login/RecruiterLogin";
 import TrainingCoordinatorLogin from "./Components-Login/TrainingCoordinatorLogin";
 import ForgotPassword from "./Components-Login/ForgotPassword";
-import PlacementofficerLogin from "./Components-Login/PlacementofficerLogin";
+// import PlacementofficerLogin from "./Components-Login/PlacementofficerLogin";
 import AdminLogin from "./Components-Login/AdminLogin";
-import QuickHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
-import StatCardsPage from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
-import QuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
-import PlacementOfficerHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
-import PlacementOfficerStatCards from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
-import PlacementOfficerQuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
-
+// import QuickHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
+// import StatCardsPage from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
+// import QuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
+// import PlacementOfficerHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
+// import PlacementOfficerStatCards from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
+// import PlacementOfficerQuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
+import AdminDashboard from "./Components/AdminDashboard";
 
 const router = createBrowserRouter([
 {
@@ -39,10 +39,10 @@ const router = createBrowserRouter([
   path:'/PRP_Portal/Login/Student',
   element:<StudentLogin/>
 },
-{
-  path:'/PRP_Portal/Login/PlacementOfficer',
-  element:<PlacementofficerLogin/>
-},
+// {
+//   path:'/PRP_Portal/Login/PlacementOfficer',
+//   element:<PlacementofficerLogin/>
+// },
 {
   path:'/PRP_Portal/Login/Recruiter',
   element:<RecruiterLogin/>
@@ -62,9 +62,15 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <PlacementOfficerHeader />
+      {/* <PlacementOfficerHeader />
       <PlacementOfficerStatCards />
-      <PlacementOfficerQuickActionsPage />
+      <PlacementOfficerQuickActionsPage /> */}
+      <AdminDashboard />
+      <DataProvider>
+        {/* <RouterProvider router={router} /> */}
+      </DataProvider>
+    
+    
     </>
   );
 }
