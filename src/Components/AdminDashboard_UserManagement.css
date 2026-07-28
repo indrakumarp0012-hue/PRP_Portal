@@ -12,7 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 22px;
+  padding: 18px 18px;
   border-bottom: 1px solid #edf0f4;
 }
 
@@ -40,8 +40,8 @@
 }
 
 .action-item img {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 table {
@@ -54,7 +54,7 @@ thead {
 }
 
 thead th {
-  padding: 14px 22px;
+  padding: 14px 20px;
   text-align: left;
   font-size: 12px;
   font-weight: 700;
@@ -67,7 +67,7 @@ tbody tr {
 }
 
 tbody td {
-  padding: 18px 22px;
+  padding: 18px 18px;
   vertical-align: middle;
   font-size: 14px;
   color: #374151;
@@ -81,8 +81,8 @@ tbody td {
 }
 
 .user-avatar {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -102,7 +102,7 @@ tbody td {
 
 
 .role-tag {
-  height: 24px;
+  height: 20px;
   object-fit: contain;
 }
 
@@ -121,18 +121,18 @@ tbody td {
 }
 
 .menu-icon:hover {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 700px) {
   .table-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 13px;
+    gap: 10px;
   }
 
   table {
-    min-width: 800px;
+    min-width: 600px;
   }
 
   .user-table-card {
