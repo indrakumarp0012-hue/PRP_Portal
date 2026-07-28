@@ -22,3 +22,6 @@ const Modalbox = ({ show, success, message, onClose }) => {
 };
 
 export default Modalbox;
+
+
+

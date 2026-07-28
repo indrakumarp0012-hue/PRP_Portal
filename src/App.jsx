@@ -8,15 +8,15 @@ import StudentLogin from "./Components-Login/StudentLogin";
 import RecruiterLogin from "./Components-Login/RecruiterLogin";
 import TrainingCoordinatorLogin from "./Components-Login/TrainingCoordinatorLogin";
 import ForgotPassword from "./Components-Login/ForgotPassword";
-// import PlacementofficerLogin from "./Components-Login/PlacementofficerLogin";
+import PlacementofficerLogin from "./Components-Login/PlacementofficerLogin";
 import AdminLogin from "./Components-Login/AdminLogin";
-// import QuickHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
-// import StatCardsPage from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
-// import QuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
-// import PlacementOfficerHeader from "./Placement-officer-Dashboard/PlacementOfficerHeader";
-// import PlacementOfficerStatCards from "./Placement-officer-Dashboard/PlacementOfficerStatCards";
-// import PlacementOfficerQuickActionsPage from "./Placement-officer-Dashboard/PlacementOfficerQuickActionsPage";
-import AdminDashboard from "./Components/AdminDashboard";
+import QuickHeader from "./Components-Placementofficer/PlacementOfficerHeader";
+import StatCardsPage from "./Components-Placementofficer/PlacementOfficerStatCards";
+import QuickActionsPage from "./Components-Placementofficer/PlacementOfficerQuickActionsPage";
+import PlacementOfficerHeader from "./Components-Placementofficer/PlacementOfficerHeader";
+import PlacementOfficerStatCards from "./Components-Placementofficer/PlacementOfficerStatCards";
+import PlacementOfficerQuickActionsPage from "./Components-Placementofficer/PlacementOfficerQuickActionsPage";
+import AdminDashboard from "./Components-Admin/AdminDashboard";
 
 const router = createBrowserRouter([
 {

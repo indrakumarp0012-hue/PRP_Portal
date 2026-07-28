@@ -1,15 +1,15 @@
 import React from "react";
 import "./AdminDashboard_UserManagement.css";
 
-import usermanagement_recruiter_i from "../assets/AdminDashbordAssets/usermanagement_recruiter_i.png";
-import usermanagement_candidate_i from "../assets/AdminDashbordAssets/usermanagement_candidate_i.png";
+import usermanagement_recruiter_i from "../assets/AdminAssets/usermanagement_recruiter_i.png";
+import usermanagement_candidate_i from "../assets/AdminAssets/usermanagement_candidate_i.png";
 
-import filter_i from "../assets/AdminDashbordAssets/filter_i.png";
-import sort_i from "../assets/AdminDashbordAssets/sort_i.png";
-import admin_more_i from "../assets/AdminDashbordAssets/more_i.png";
+import filter_i from "../assets/AdminAssets/filter_i.png";
+import sort_i from "../assets/AdminAssets/sort_i.png";
+import admin_more_i from "../assets/AdminAssets/more_i.png";
 
-import sarah_i from "../assets/AdminDashbordAssets/sarah_i.png";
-import david_i from "../assets/AdminDashbordAssets/david_i.png";
+import sarah_i from "../assets/AdminAssets/sarah_i.png";
+import david_i from "../assets/AdminAssets/david_i.png";
 
 const users = [
   {

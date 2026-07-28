@@ -1,10 +1,10 @@
 import React from "react";
 import "./AdminDashboard_Sidebar.css";
-import admin_home_i from "../assets/AdminDashbordAssets/admin_home_i.png"
-import user_management_i from "../assets/AdminDashbordAssets/user_management_i.png"
-import company_verification_i from "../assets/AdminDashbordAssets/company_verification_i.png"
-import settings_i from "../assets/AdminDashbordAssets/settings_i.png"
-import analytics_i from "../assets/AdminDashbordAssets/analytics_i.png"
+import admin_home_i from "../assets/AdminAssets/admin_home_i.png"
+import user_management_i from "../assets/AdminAssets/user_management_i.png"
+import company_verification_i from "../assets/AdminAssets/company_verification_i.png"
+import settings_i from "../assets/AdminAssets/settings_i.png"
+import analytics_i from "../assets/AdminAssets/analytics_i.png"
 
 const dashboardIcon = admin_home_i;     
 const userIcon = user_management_i;

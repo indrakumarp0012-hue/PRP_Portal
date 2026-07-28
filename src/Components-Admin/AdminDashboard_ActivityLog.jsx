@@ -1,11 +1,11 @@
 import React from "react";
 import "./AdminDashboard_ActivityLog.css";
 
-import activity_user_i from "../assets/AdminDashbordAssets/activity_user_i.png";
-import activity_company_i from "../assets/AdminDashbordAssets/activity_company_i.png";
-import activity_verified_i from "../assets/AdminDashbordAssets/activity_verified_i.png";
-import activity_security_i from "../assets/AdminDashbordAssets/activity_security_i.png";
-import activity_failed_i from "../assets/AdminDashbordAssets/activity_failed_i.png";
+import activity_user_i from "../assets/AdminAssets/activity_user_i.png";
+import activity_company_i from "../assets/AdminAssets/activity_company_i.png";
+import activity_verified_i from "../assets/AdminAssets/activity_verified_i.png";
+import activity_security_i from "../assets/AdminAssets/activity_security_i.png";
+import activity_failed_i from "../assets/AdminAssets/activity_failed_i.png";
 
 const activities = [
   {

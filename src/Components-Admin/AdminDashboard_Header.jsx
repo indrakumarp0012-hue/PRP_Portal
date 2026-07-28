@@ -1,10 +1,10 @@
 import React from "react";
 import "./AdminDashboard_Header.css";
-import search_i from "../assets/AdminDashbordAssets/search_i.png"
-import notification_i from "../assets/AdminDashbordAssets/notification_i.png"
-import quation_i from "../assets/AdminDashbordAssets/quation_i.png"
-import settings_i from "../assets/AdminDashbordAssets/settings_i.png"
-import admin_profile_i from "../assets/AdminDashbordAssets/admin_profile_i.png";
+import search_i from "../assets/AdminAssets/search_i.png"
+import notification_i from "../assets/AdminAssets/notification_i.png"
+import quation_i from "../assets/AdminAssets/quation_i.png"
+import settings_i from "../assets/AdminAssets/settings_i.png"
+import admin_profile_i from "../assets/AdminAssets/admin_profile_i.png";
 
 const AdminDashboard_Header = () => {
   return (

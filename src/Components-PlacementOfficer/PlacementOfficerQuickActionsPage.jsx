@@ -1,10 +1,10 @@
 import React from "react";
 import "./PlacementOfficerQuickActionsPage.css";
 
-import AddProfilesIcon from "../assets/PlacementOfficerDashbordAssets/hugeicons_new-job.png";
-import MockInterviewIcon from "../assets/PlacementOfficerDashbordAssets/Frame 198.png";
-import ScheduleDriveIcon from "../assets/PlacementOfficerDashbordAssets/mdi-light_calendar.png";
-import SendNoticeIcon from "../assets/PlacementOfficerDashbordAssets/material-symbols-light_send-outline.png";
+import AddProfilesIcon from "../assets/PlacementOfficerAssets/hugeicons_new-job.png";
+import MockInterviewIcon from "../assets/PlacementOfficerAssets/Frame 198.png";
+import ScheduleDriveIcon from "../assets/PlacementOfficerAssets/mdi-light_calendar.png";
+import SendNoticeIcon from "../assets/PlacementOfficerAssets/material-symbols-light_send-outline.png";
 
 const QuickActions = () => {
   const actions = [

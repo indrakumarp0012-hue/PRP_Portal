@@ -1,15 +1,15 @@
 import React from "react";
 import "./AdminDashboard_Stats.css";
 
-import placement_i from "../assets/AdminDashbordAssets/placement_i.png";
-import student_i from "../assets/AdminDashbordAssets/student_i.png";
-import recruiter_i from "../assets/AdminDashbordAssets/recruiter_i.png";
-import partner_i from "../assets/AdminDashbordAssets/partner_i.png";
+import placement_i from "../assets/AdminAssets/placement_i.png";
+import student_i from "../assets/AdminAssets/student_i.png";
+import recruiter_i from "../assets/AdminAssets/recruiter_i.png";
+import partner_i from "../assets/AdminAssets/partner_i.png";
 
-import green_arrow_i from "../assets/AdminDashbordAssets/green_arrow_i.png";
-import purple_arrow_i from "../assets/AdminDashbordAssets/purple_arrow_i.png";
-import orange_pending_i from "../assets/AdminDashbordAssets/orange_pending_i.png";
-import growth_i from "../assets/AdminDashbordAssets/growth_i.png";
+import green_arrow_i from "../assets/AdminAssets/green_arrow_i.png";
+import purple_arrow_i from "../assets/AdminAssets/purple_arrow_i.png";
+import orange_pending_i from "../assets/AdminAssets/orange_pending_i.png";
+import growth_i from "../assets/AdminAssets/growth_i.png";
 
 const stats = [
   {

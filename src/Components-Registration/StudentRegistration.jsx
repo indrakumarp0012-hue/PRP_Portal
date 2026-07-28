@@ -8,7 +8,7 @@ import Hide from "../assets/RegistrationAssets/HidePwd.png";
 import './StudentRegistration.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useData } from '../DataProvider';
-import Modalbox from '../Resusable-Components/Modalbox';
+import Modalbox from '../Components-Resusable/Modalbox';
 
 const StudentRegistration = () => {
     const navigate=useNavigate();

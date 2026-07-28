@@ -5,7 +5,7 @@ import ProductLogo from '../assets/RegistrationAssets/Eduhire.png';
 import EyeImg from "../assets/RegistrationAssets/EyeIcon.png";
 import Hide from "../assets/RegistrationAssets/HidePwd.png";
 import './StudentLogin.css'
-import Modalbox from '../Resusable-Components/Modalbox';
+import Modalbox from '../Components-Resusable/Modalbox';
 
 const PlacementofficerLogin = () => {
     const navigate = useNavigate()
