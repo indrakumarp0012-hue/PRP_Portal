@@ -67,11 +67,14 @@ const AdminDashboard_UserManagement = () => {
             <tr key={index}>
               <td>
                 <div className="user-info">
-                  <img
+                  <div className="user-avatar">
+                    <img
                     src={user.image}
                     alt={user.name}
-                    className="user-avatar"
+                    width={"100%"}
+                    height={"100%"}
                   />
+                  </div>
 
                   <div>
                     <h4>{user.name}</h4>
