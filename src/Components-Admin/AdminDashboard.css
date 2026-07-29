@@ -1,87 +1,376 @@
-.admin-dashboard {
+.AdminDashboard-page {
   display: flex;
-  min-height: 100vh;
-  background: #f8fafc;
 }
 
-* {
+.AdminDashboard-container,
+.AdminDashboard-container * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.sidebar {
-  width: 260px;
-  height:147vh;
-  background: linear-gradient(180deg, #f8f0fc 0%, #cb9be4 55%, #b366d8 100%);
-  border-right: 6px solid #6a0dad;
-  border-radius: 0 30px 30px 0;
-  overflow: hidden;
-  margin-top: 2vh;
+.AdminDashboard-container {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  padding: 25px;
+  overflow-y: auto;
+  background: #f6f8fc;
 }
-.sidebar-top {
+
+.AdminDashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 15px 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.AdminDashboard-search {
+  width: 360px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 25px;
+  padding: 0 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.AdminDashboard-searchIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.AdminDashboard-search input {
   width: 100%;
-  height: 42px;
-  background: #ffffff;
-  border-bottom-right-radius: 20px;
+  border: none;
+  outline: none;
+  margin-left: 10px;
+  font-size: 14px;
+  background: transparent;
 }
 
-
-.sidebar-menu {
-  list-style: none;
-  margin-top: 18px;
-  padding: 0 14px;
+.AdminDashboard-headerRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-.sidebar-menu li {
+.AdminDashboard-icon {
+  width: 20px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.AdminDashboard-rowActionIcon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.AdminDashboard-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.AdminDashboard-profile img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.AdminDashboard-profile h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.AdminDashboard-profile span {
+  font-size: 12px;
+  color: #777;
+}
+
+.AdminDashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.AdminDashboard-card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid #ececec;
+}
+
+.AdminDashboard-cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.AdminDashboard-cardTop span {
+  color: #666;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.AdminDashboard-cardIcon img {
+  width: 20px;
+  height: 20px;
+}
+
+.AdminDashboard-cardNameIcon {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.AdminDashboard-card h2 {
+  margin: 15px 0 8px;
+  font-size: 35px;
+}
+
+.AdminDashboard-card p {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.AdminDashboard-middle {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.AdminDashboard-chartCard,
+.AdminDashboard-activity,
+.AdminDashboard-tableCard {
+  background: white;
+  border-radius: 15px;
+  padding: 22px;
+  border: 1px solid #ececec;
+}
+
+.AdminDashboard-chartHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.AdminDashboard-chartHeader h2 {
+  margin-bottom: 5px;
+}
+
+.AdminDashboard-chartHeader span {
+  color: gray;
+  font-size: 14px;
+}
+
+.AdminDashboard-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #7b4ae2;
+  font-weight: 600;
+}
+
+.AdminDashboard-legendDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #7b4ae2;
+}
+
+.AdminDashboard-bars {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 280px;
+}
+
+.AdminDashboard-barBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AdminDashboard-bar {
+  width: 55px;
+  background: #e5d9ff;
+  border-radius: 8px 8px 0 0;
+}
+
+.AdminDashboard-bar.AdminDashboard-barActive {
+  background: #7d53d5;
+}
+
+.AdminDashboard-barBox span {
+  margin-top: 10px;
+  color: #555;
+}
+
+.AdminDashboard-activity h2 {
+  margin-bottom: 20px;
+}
+
+.AdminDashboard-activityItem {
   display: flex;
   align-items: center;
   gap: 12px;
-  height: 44px;
-  padding: 0 14px;
-  margin-bottom: 10px;
-  border-radius: 22px;
-  cursor: pointer;
-  transition: 0.3s;
+  margin-bottom: 22px;
 }
 
-.sidebar-menu li img {
-  width: 18px;
-  height: 18px;
+.AdminDashboard-activityItem h4 {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.AdminDashboard-activityItem p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: gray;
+  font-size: 13px;
+}
+
+.AdminDashboard-activityMetaDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: gray;
+  flex-shrink: 0;
+}
+
+.AdminDashboard-activityIcon {
+  width: 34px;
+  height: 34px;
   object-fit: contain;
+  border-radius: 50%;
+  margin-top: 5px;
 }
 
-.sidebar-menu li span {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1f2937;
+.AdminDashboard-activity a {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #7d53d5;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-
-.sidebar-menu li.active {
-  background: #7b1fa2;
+.AdminDashboard-tableHeader {
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.sidebar-menu li.active span {
-  color: #ffffff;
+.AdminDashboard-tableActions {
+  display: flex;
+  gap: 20px;
 }
 
-.sidebar-menu li.active img {
-  filter: brightness(0) invert(1);
+.AdminDashboard-tableActions span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }
 
-
-.sidebar-menu li:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.45);
+.AdminDashboard-tableActions img {
+  width: 20px;
+  height: 16px;
 }
 
+.AdminDashboard-tableCard table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-@media (max-width: 768px) {
-  .sidebar {
-    width: 220px;
+.AdminDashboard-tableCard thead {
+  background: #eef7fc;
+}
+
+.AdminDashboard-tableCard th,
+.AdminDashboard-tableCard td {
+  padding: 18px;
+  text-align: left;
+}
+
+.AdminDashboard-tableCard tbody tr {
+  border-top: 1px solid #ececec;
+}
+
+.AdminDashboard-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.AdminDashboard-avatar {
+  width: 42px;
+  height: 42px;
+  background: #efe5ff;
+  color: #7d53d5;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.AdminDashboard-user h4 {
+  margin-bottom: 4px;
+}
+
+.AdminDashboard-user span {
+  font-size: 12px;
+  color: gray;
+}
+
+.AdminDashboard-badge {
+  background: #eef1f5;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .AdminDashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .sidebar-menu li span {
-    font-size: 13px;
+  .AdminDashboard-middle {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .AdminDashboard-topbar {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .AdminDashboard-search {
+    width: 100%;
+  }
+
+  .AdminDashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .AdminDashboard-tableCard table {
+    display: block;
+    overflow-x: auto;
   }
 }
