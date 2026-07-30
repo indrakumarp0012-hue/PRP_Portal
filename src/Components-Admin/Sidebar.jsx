@@ -1,18 +1,18 @@
 import React from "react";
 import "./Sidebar.css";
 
-import admin_home_i from "../assets/AdminAssets/admin_home_i.png";
-import user_management_i from "../assets/AdminAssets/user_management_i.png";
-import company_verification_i from "../assets/AdminAssets/company_verification_i.png";
-import settings_i from "../assets/AdminAssets/settings_i.png";
-import analytics_i from "../assets/AdminAssets/analytics_i.png";
+import admin_home from "../assets/AdminAssets/admin_home.png";
+import user_management from "../assets/AdminAssets/user_management.png";
+import company_verification from "../assets/AdminAssets/company_verification.png";
+import settings from "../assets/AdminAssets/settings.png";
+import analytics from "../assets/AdminAssets/analytics.png";
 
 const menuItems = [
-  { label: "Dashboard", icon: admin_home_i, active: true },
-  { label: "User Management", icon: user_management_i },
-  { label: "Company Verification", icon: company_verification_i },
-  { label: "Platform Settings", icon: settings_i },
-  { label: "Analytics", icon: analytics_i },
+  { label: "Dashboard", icon: admin_home, active: true },
+  { label: "User Management", icon: user_management },
+  { label: "Company Verification", icon: company_verification },
+  { label: "Platform Settings", icon: settings },
+  { label: "Analytics", icon: analytics },
 ];
 
 const Sidebar = () => {
