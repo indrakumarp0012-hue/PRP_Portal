@@ -3,7 +3,7 @@ import "./PlacementOfficerHeader.css";
 import SearchIcon from "../assets/PlacementOfficerHeadersAssets/Vector.png";
 import NotificationIcon from "../assets/PlacementOfficerHeadersAssets/Frame 353.png";
 import MessageIcon from "../assets/PlacementOfficerHeadersAssets/Frame 354.png";
-import ProfileImage from "../assets/PlacementOfficerAssets/Frame 198.png";
+import ProfileImage from "../assets/PlacementOficerHeaderAssets/Profile.png";
 
 const PlacementOfficerHeader = () => {
   return (
