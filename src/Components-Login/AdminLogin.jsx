@@ -9,15 +9,19 @@ import Lock from '../assets/LoginAssets/AdminLockIcon.png'
 import SecureAcc from '../assets/LoginAssets/SecureAccess.png'
 import Email from '../assets/LoginAssets/EmailIcon.png'
 import Pass from '../assets/LoginAssets/PassIcon.png'
+import Modalbox from '../Resusable-Components/Modalbox';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const AdminLogin = () => {
+    const navigate= useNavigate()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const initialValues = { Email: "", password: "" }
     const [formValues, setFormValues] = useState(initialValues)
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState({});
+    const [modal, setModal] = useState({ show: false, success: false, message: "" });
 
     const userName = "Admin@admin.com";
     const passWord = "Admin@12345";
@@ -45,14 +49,20 @@ const AdminLogin = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setError({});
-
+        
         if (!validateForm()) return;
-        console.log(error)
-        alert("Login Successful");
+        
         setFormValues(initialValues)
+        setModal({
+            show: true,
+            success: true,
+            message: "Login Successful! Welcome back."
+        });
+        
     }
 
     const handleForm = (e) => {
@@ -60,6 +70,13 @@ const AdminLogin = () => {
         setFormValues({ ...formValues, [name]: value });
         setError({ ...error, [name]: "", loginError: "" });
     };
+
+    const closeModal = () => {
+        setModal({ show: false, success: false, message: "" });
+        navigate('/PRP_Portal/Admin/Dashboard')
+        
+    };
+
     return (
         <>
             <div className='AdminLogin-Container'>
@@ -117,7 +134,7 @@ const AdminLogin = () => {
                                             className={error.password || error.LoginError ? "UserLogin-Form-Input-Errors" : "AdminLogin-Form-Input"}
                                             autoComplete='off'
                                             name="password"
-                                            placeholder="********"
+                                            placeholder="Enter your password"
                                             id='Password'
                                             value={formValues.password}
                                             onChange={handleForm}
@@ -162,8 +179,13 @@ const AdminLogin = () => {
 
                     </form>
                 </div>
-
             </div>
+
+            <Modalbox 
+                show={modal.show} 
+                success={modal.success} 
+                message={modal.message} 
+                onClose={closeModal}/>
         </>
     )
 }

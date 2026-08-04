@@ -2,12 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22px 40px;
+  padding: 20px 40px;
   background-color: #B351B233;
+  /* background: linear-gradient(to right,#8037b092 0%,#fff 70%); */
   box-sizing: border-box; 
 }
 
-/* Flex item default configurations */
 .UserRegistration-Logo-Title {
   display: flex;
   align-items: center;
@@ -32,7 +32,7 @@
 .LandingPage-header-btns {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 25px;
 }
 
 .LandingPage-btn-login {
@@ -43,7 +43,7 @@
   font-weight: 600;
   cursor: pointer;
   padding: 10px 24px;
-  border-radius: 50px; 
+  border-radius: 6px; 
   transition: all 0.2s ease;
 }
 
@@ -52,7 +52,7 @@
   color: #ffffff;
   border: none;
   padding: 10px 24px;
-  border-radius: 50px; 
+  border-radius: 6px; 
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -90,7 +90,6 @@
     padding: 12px 16px;
   }
 
-  /* Logo Image shrink handling */
   .UserRegistration-Logo-Title img {
     width: 32px; 
   }

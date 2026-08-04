@@ -7,7 +7,7 @@ import SearchImg from "../assets/RegistrationAssets/SearchIcon.png";
 import RightArrowImg from "../assets/RegistrationAssets/RightArrow.png";
 import { Link, useNavigate } from 'react-router-dom';
 import { useData } from '../DataProvider';
-import Modalbox from "../Components-Resusable/Modalbox";
+import Modalbox from '../Resusable-Components/Modalbox';
 
 const RecruiterRegistration = () => {
     const navigate = useNavigate()

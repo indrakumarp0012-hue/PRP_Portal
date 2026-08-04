@@ -211,7 +211,7 @@ text-align: center;
 
 .LandingPage-features-container {
   padding: 40px;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -334,7 +334,7 @@ text-align: center;
 .LandingPage-datas-container{
   width:85%;
   margin:10px auto;
-  padding:5px 0px 40px;
+  padding:40px;
   display:flex;
   justify-content:space-evenly;
   align-items:center;
@@ -353,7 +353,7 @@ text-align: center;
 }
 
 .LandingPage-datas p{
-  margin-top:-18px;
+  margin-top:16px;
   font-size:16px;
 }
 
@@ -589,7 +589,6 @@ width: 100%;
 
 
 @media screen and (max-width: 768px) {
-  /* Intro Section */
   .LandingPage-intro-section {
     grid-template-columns: 1fr;
     padding: 40px 20px;
