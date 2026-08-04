@@ -6,8 +6,18 @@
 
 .Sidebar-container {
   width: 250px;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #f8f2ff 0%, #c98ce6 100%);
+  height: 875px;
+  margin: 10px 0 10px 10px;   
+
+  background: linear-gradient(
+    180deg,
+    #f8f2ff 0%,
+    #ecd5f8 35%,
+    #d8a8eb 70%,
+    #b96bd8 100%
+  );
+
+  border-right: 4px solid #5d169b;
   border-top-right-radius: 22px;
   border-bottom-right-radius: 22px;
   overflow: hidden;
@@ -19,9 +29,7 @@
   height: 58px;
   background: #ffffff;
   border-top-right-radius: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-bottom-right-radius: 10px;
 }
 
 .Sidebar-menu {
@@ -32,7 +40,7 @@
 }
 
 .Sidebar-menuItem {
-  height: 48px;
+  height: 46px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -41,18 +49,22 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .Sidebar-menuItem:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255,255,255,0.35);
 }
 
 .Sidebar-menuItemActive {
-  background: #7c1dc9; 
-  color: #ffffff;
-  border-radius: 0 12px 12px 0;
+  background: #7c1dc9;
+  color: #fff;
   margin-left: 12px;
+  border-radius: 20px 0 0 20px;
+}
+
+.Sidebar-menuItemActive .Sidebar-icon {
+  filter: brightness(0) invert(1);
 }
 
 .Sidebar-icon {
@@ -65,15 +77,15 @@
   white-space: nowrap;
 }
 
-
 @media (max-width: 768px) {
   .Sidebar-container {
     width: 210px;
+    margin: 8px;
   }
 
   .Sidebar-menuItem {
-    font-size: 13px;
     padding: 0 18px;
+    font-size: 13px;
   }
 
   .Sidebar-icon {
