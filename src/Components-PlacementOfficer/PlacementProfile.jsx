@@ -34,7 +34,7 @@ const PlacementProfile = () => {
             </div>
 
            <div className="placement-header-profile">
-               <img src={Profile2} alt="Priyanka" />
+               <img src={Profile1} alt="Priyanka" />
                <div className="placement-header-profile-info">
                   <h4>Priyanka</h4>
                   <p>Placement Officer</p>
@@ -53,7 +53,7 @@ const PlacementProfile = () => {
           <div className="placement-profile-card">
             <div className="placement-profile-gradient"></div>
             <div className="placement-profile-image-wrapper">
-              <img src={Profile1} alt="Priyanka" className="placement-profile-image" />
+              <img src={Profile2} alt="Priyanka" className="placement-profile-image" />
             </div>
             <h2>Priyanka</h2>
             <p>Placement Officer</p>
