@@ -226,8 +226,8 @@ const PlacementOfficerDashboard = () => {
         <div className="PO-Dashboard-card priority-card">
           <h3 className="PO-Dashboard-card-title">Today's Priority</h3>
           <div className="PO-Dashboard-priority-list">
-            {todayPriority.map((task, idx) => (
-              <div className="PO-Dashboard-priority-item" key={idx}>{task}</div>
+            {todayPriority.map((task) => (
+              <div className="PO-Dashboard-priority-item" key={task}>{task}</div>
             ))}
           </div>
           <button className="PO-Dashboard-view-task-btn">
@@ -244,8 +244,8 @@ const PlacementOfficerDashboard = () => {
           </div>
           <div className="PO-Dashboard-drives-list">
             {upcomingDrives.map((drive) => (
-              <div className='PO-Dashboard-drives-item-Wrapper'>
-                <div className="PO-Dashboard-drive-item" key={drive.id}>
+              <div className='PO-Dashboard-drives-item-Wrapper' key={drive.id}>
+                <div className="PO-Dashboard-drive-item">
                   <div className="PO-Dashboard-company-logo-box">
                     <img src={drive.logo} alt={drive.company} className="PO-Dashboard-drive-logo-img" />
                   </div>
@@ -346,8 +346,8 @@ const PlacementOfficerDashboard = () => {
             </div>
 
             <div className="PO-Dashboard-pie-side-legend">
-              {departmentWiseData.map((dept, idx) => (
-                <div key={idx} className="PO-Dashboard-pie-legend-row">
+              {departmentWiseData.map((dept) => (
+                <div key={dept.name} className="PO-Dashboard-pie-legend-row">
                   <div className="PO-Dashboard-pie-legend-left">
                     <span className="PO-Dashboard-pie-dot" style={{ backgroundColor: dept.color }}></span>
                     <span className="PO-Dashboard-dept-name">{dept.name}</span>
