@@ -535,7 +535,6 @@
   grid-column: 1 / -1;
 }
 
-/* Hide empty item */
 
 .placement-institute-grid .placement-info-item:nth-child(2) {
   display: none;
