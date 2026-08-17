@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PlacementProfile.css";
-
 import Search from "../assets/PlacementProfileAssets/Search.png";
 import Notification from "../assets/PlacementProfileAssets/Notifiction.png";
 import Message from "../assets/PlacementProfileAssets/Message.png";
@@ -37,7 +36,6 @@ const PlacementProfile = () => {
     professionalAddress: "745 OMR Road, Chennai - 105215",
   };
 
-
   const initialDocuments = [
     {
       id: 1,
@@ -62,7 +60,6 @@ const PlacementProfile = () => {
     },
   ];
 
-
   const [isEditing, setIsEditing] = useState(false);
 
   const [formData, setFormData] = useState(initialFormData);
@@ -81,7 +78,14 @@ const PlacementProfile = () => {
   const [documentError, setDocumentError] =
     useState("");
 
+  const [profilePictureError, setProfilePictureError] =
+    useState("");
+
   const [successMessage, setSuccessMessage] =
+    useState("");
+
+  
+  const [errorMessage, setErrorMessage] =
     useState("");
 
   const [showNotifications, setShowNotifications] =
@@ -90,16 +94,11 @@ const PlacementProfile = () => {
   const [showMessages, setShowMessages] =
     useState(false);
 
-
   const [profilePicture, setProfilePicture] =
     useState(Profile2);
 
-  
   const [savedProfilePicture, setSavedProfilePicture] =
     useState(Profile2);
-
-  const [profilePictureError, setProfilePictureError] =
-    useState("");
 
   const notificationRef = useRef(null);
   const messageRef = useRef(null);
@@ -176,18 +175,15 @@ const PlacementProfile = () => {
     };
   }, []);
 
-
   const handleNotificationClick = () => {
     setShowNotifications((prev) => !prev);
     setShowMessages(false);
   };
 
-
   const handleMessageClick = () => {
     setShowMessages((prev) => !prev);
     setShowNotifications(false);
   };
-
 
   const validateForm = () => {
     const newErrors = {};
@@ -326,8 +322,11 @@ const PlacementProfile = () => {
         [name]: "",
       }));
     }
-  };
 
+    if (errorMessage) {
+      setErrorMessage("");
+    }
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -335,7 +334,9 @@ const PlacementProfile = () => {
     setDocumentError("");
     setProfilePictureError("");
     setSuccessMessage("");
+    setErrorMessage("");
   };
+
   const handleProfilePictureChange = (e) => {
     const file = e.target.files?.[0];
 
@@ -344,6 +345,7 @@ const PlacementProfile = () => {
     }
 
     setProfilePictureError("");
+    setErrorMessage("");
 
     const allowedTypes = [
       "image/jpeg",
@@ -375,6 +377,7 @@ const PlacementProfile = () => {
       e.target.value = "";
       return;
     }
+
     const maxSize = 5 * 1024 * 1024;
 
     if (file.size > maxSize) {
@@ -386,7 +389,6 @@ const PlacementProfile = () => {
       return;
     }
 
-  
     const imageUrl = URL.createObjectURL(file);
 
     setProfilePicture(imageUrl);
@@ -396,16 +398,15 @@ const PlacementProfile = () => {
     e.target.value = "";
   };
 
-
   const handleDeleteProfilePicture = () => {
     setProfilePicture(null);
     setProfilePictureError("");
+    setErrorMessage("");
   };
+
   const handleCancel = () => {
     setFormData(savedFormData);
     setDocuments(savedDocuments);
-
-   
     setProfilePicture(savedProfilePicture);
 
     setIsEditing(false);
@@ -414,24 +415,34 @@ const PlacementProfile = () => {
     setDocumentError("");
     setProfilePictureError("");
     setSuccessMessage("");
+    setErrorMessage("");
   };
+
   const handleSaveChanges = () => {
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+
+     
+      setErrorMessage(
+        "Please fix the validation errors before saving."
+      );
+
+      setSuccessMessage("");
+
       return;
     }
 
     setSavedFormData(formData);
     setSavedDocuments(documents);
-
-   
     setSavedProfilePicture(profilePicture);
 
     setSuccessMessage(
       "Profile updated successfully!"
     );
+
+    setErrorMessage("");
 
     setIsEditing(false);
 
@@ -450,6 +461,7 @@ const PlacementProfile = () => {
     if (!file) return;
 
     setDocumentError("");
+    setErrorMessage("");
 
     const allowedTypes = [
       "application/pdf",
@@ -544,7 +556,6 @@ const PlacementProfile = () => {
     setDocumentError("");
   };
 
-
   const handleViewDocument = (doc) => {
     if (doc.url) {
       window.open(
@@ -560,7 +571,6 @@ const PlacementProfile = () => {
       `${doc.name} is currently available as a document record, but no file has been uploaded yet.`
     );
   };
-
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -582,6 +592,7 @@ const PlacementProfile = () => {
   return (
     <div className="placement-profile-page">
 
+     
 
       <header className="placement-header">
 
@@ -599,6 +610,7 @@ const PlacementProfile = () => {
 
         <div className="placement-header-right">
 
+        
 
           <div
             className="placement-header-action"
@@ -692,7 +704,7 @@ const PlacementProfile = () => {
             )}
           </div>
 
-      
+        
 
           <div
             className="placement-header-action"
@@ -786,7 +798,7 @@ const PlacementProfile = () => {
             )}
           </div>
 
-         
+        
 
           <div className="placement-header-profile">
 
@@ -796,8 +808,13 @@ const PlacementProfile = () => {
             />
 
             <div className="placement-header-profile-info">
+
               <h4>Priyanka</h4>
-              <p>Placement Officer</p>
+
+              <p>
+                Placement Officer
+              </p>
+
             </div>
 
           </div>
@@ -817,19 +834,25 @@ const PlacementProfile = () => {
 
       </div>
 
-     
-
       {successMessage && (
         <div className="placement-success-message">
           {successMessage}
         </div>
       )}
 
+      {errorMessage && (
+        <div className="placement-error-message">
+          {errorMessage}
+        </div>
+      )}
 
       <div className="placement-profile-content">
 
+      
 
         <aside className="placement-left-column">
+
+        
 
           <div className="placement-profile-card">
 
@@ -889,6 +912,7 @@ const PlacementProfile = () => {
             className="placement-edit-btn"
             onClick={handleEditClick}
           >
+
             <img
               src={Editprofile}
               alt="Edit"
@@ -897,8 +921,10 @@ const PlacementProfile = () => {
             <span>
               Edit Profile
             </span>
+
           </button>
 
+         
 
           {isEditing && (
             <button
@@ -916,7 +942,6 @@ const PlacementProfile = () => {
                 {profilePictureError}
               </span>
             )}
-
           <div className="placement-professional-card">
 
             <div className="placement-section-heading">
@@ -934,7 +959,7 @@ const PlacementProfile = () => {
 
             <div className="placement-professional-details">
 
-            
+      
 
               <div className="placement-detail-item">
 
@@ -1050,7 +1075,8 @@ const PlacementProfile = () => {
 
               </div>
 
-      
+             
+
               <div className="placement-detail-item">
 
                 <label>
@@ -1088,6 +1114,8 @@ const PlacementProfile = () => {
                 )}
 
               </div>
+
+             
 
               <div className="placement-detail-item">
 
@@ -1137,7 +1165,11 @@ const PlacementProfile = () => {
 
         </aside>
 
+    
+
         <main className="placement-right-column">
+
+         
 
           <section className="placement-info-card">
 
@@ -1156,7 +1188,7 @@ const PlacementProfile = () => {
 
             <div className="placement-personal-grid">
 
-              {/* Name */}
+            
 
               <div className="placement-info-item">
 
@@ -1196,7 +1228,8 @@ const PlacementProfile = () => {
 
               </div>
 
-      
+             
+
               <div className="placement-info-item">
 
                 <label>
@@ -1237,7 +1270,7 @@ const PlacementProfile = () => {
 
               </div>
 
-              
+           
 
               <div className="placement-info-item">
 
@@ -1277,7 +1310,7 @@ const PlacementProfile = () => {
 
               </div>
 
-            
+        
 
               <div className="placement-info-item">
 
@@ -1295,6 +1328,7 @@ const PlacementProfile = () => {
                       handleInputChange
                     }
                   >
+
                     <option value="Female">
                       Female
                     </option>
@@ -1306,6 +1340,7 @@ const PlacementProfile = () => {
                     <option value="Other">
                       Other
                     </option>
+
                   </select>
                 ) : (
                   <span>
@@ -1315,7 +1350,7 @@ const PlacementProfile = () => {
 
               </div>
 
-            
+             
 
               <div className="placement-info-item">
 
@@ -1355,6 +1390,7 @@ const PlacementProfile = () => {
 
               </div>
 
+             
 
               <div className="placement-info-item full-width">
 
@@ -1398,6 +1434,7 @@ const PlacementProfile = () => {
 
           </section>
 
+         
 
           <section className="placement-info-card institute-card">
 
@@ -1416,7 +1453,7 @@ const PlacementProfile = () => {
 
             <div className="placement-institute-grid">
 
-
+            
 
               <div className="placement-info-item">
 
@@ -1488,7 +1525,7 @@ const PlacementProfile = () => {
 
               </div>
 
-             
+           
 
               <div className="placement-info-item">
 
@@ -1529,8 +1566,6 @@ const PlacementProfile = () => {
 
               </div>
 
-           
-
               <div className="placement-info-item">
 
                 <label>
@@ -1570,8 +1605,6 @@ const PlacementProfile = () => {
                 )}
 
               </div>
-
-             
 
               <div className="placement-info-item">
 
@@ -1618,6 +1651,8 @@ const PlacementProfile = () => {
             </div>
 
           </section>
+
+          
 
           <section className="placement-documents-card">
 
@@ -1694,7 +1729,6 @@ const PlacementProfile = () => {
 
             </div>
 
-         
 
             {isEditing && (
               <div className="placement-add-document">
