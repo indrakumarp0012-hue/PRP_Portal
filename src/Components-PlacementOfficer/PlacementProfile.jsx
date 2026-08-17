@@ -404,7 +404,6 @@ const PlacementProfile = () => {
     setFormData(savedFormData);
     setDocuments(savedDocuments);
 
-  
     setProfilePicture(savedProfilePicture);
 
     setIsEditing(false);
@@ -1155,8 +1154,7 @@ const PlacementProfile = () => {
 
             <div className="placement-personal-grid">
 
-              {/* Name */}
-
+             
               <div className="placement-info-item">
 
                 <label>
