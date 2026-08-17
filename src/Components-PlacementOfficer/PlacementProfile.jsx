@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PlacementProfile.css";
+
 import Search from "../assets/PlacementProfileAssets/Search.png";
 import Notification from "../assets/PlacementProfileAssets/Notifiction.png";
 import Message from "../assets/PlacementProfileAssets/Message.png";
@@ -14,26 +15,76 @@ import Employee from "../assets/PlacementProfileAssets/Employee.png";
 import Appointment from "../assets/PlacementProfileAssets/Appointment.png";
 import Certificate from "../assets/PlacementProfileAssets/Certificate.png";
 
+
+const COUNTRY_CODES = [
+  {
+    code: "+91",
+    flag: "🇮🇳",
+    label: "India",
+  },
+  {
+    code: "+1",
+    flag: "🇺🇸",
+    label: "USA/Canada",
+  },
+  {
+    code: "+44",
+    flag: "🇬🇧",
+    label: "UK",
+  },
+  {
+    code: "+61",
+    flag: "🇦🇺",
+    label: "Australia",
+  },
+  {
+    code: "+971",
+    flag: "🇦🇪",
+    label: "UAE",
+  },
+  {
+    code: "+65",
+    flag: "🇸🇬",
+    label: "Singapore",
+  },
+  {
+    code: "+49",
+    flag: "🇩🇪",
+    label: "Germany",
+  },
+  {
+    code: "+81",
+    flag: "🇯🇵",
+    label: "Japan",
+  },
+];
+
 const PlacementProfile = () => {
   const initialFormData = {
     name: "Priyanka J",
     dateOfBirth: "1988-10-14",
     email: "priya5@eduhire.com",
     gender: "Female",
-    phone: "+1 (555) 012-3456",
+
+    phone: "012-345-6789",
+    institutePhone: "012-345-6789",
+
     address: "745 ECR Road, Chennai - 100010",
 
     college: "Govt. Eng. College, CBE",
     university: "Anna University",
     website: "www.gec.in",
-    institutePhone: "+1 (555) 012-3456",
-    instituteAddress: "745 ECR Road, Coimbatore - 100010",
+
+    instituteAddress:
+      "745 ECR Road, Coimbatore - 100010",
 
     employeeId: "PO-2024-2349",
     joinedOn: "Apr 15, 2024",
     designation: "Placement Officer",
     experience: "6+ years",
-    professionalAddress: "745 OMR Road, Chennai - 105215",
+
+    professionalAddress:
+      "745 OMR Road, Chennai - 105215",
   };
 
   const initialDocuments = [
@@ -62,7 +113,8 @@ const PlacementProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] =
+    useState(initialFormData);
 
   const [savedFormData, setSavedFormData] =
     useState(initialFormData);
@@ -84,7 +136,6 @@ const PlacementProfile = () => {
   const [successMessage, setSuccessMessage] =
     useState("");
 
-  
   const [errorMessage, setErrorMessage] =
     useState("");
 
@@ -99,8 +150,23 @@ const PlacementProfile = () => {
 
   const [savedProfilePicture, setSavedProfilePicture] =
     useState(Profile2);
+  const [phoneCountryCode, setPhoneCountryCode] =
+    useState("+91");
+
+  const [savedPhoneCountryCode, setSavedPhoneCountryCode] =
+    useState("+91");
+
+  const [instituteCountryCode, setInstituteCountryCode] =
+    useState("+91");
+
+  const [
+    savedInstituteCountryCode,
+    setSavedInstituteCountryCode,
+  ] = useState("+91");
+
 
   const notificationRef = useRef(null);
+
   const messageRef = useRef(null);
 
   const notifications = [
@@ -145,6 +211,7 @@ const PlacementProfile = () => {
     },
   ];
 
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
@@ -175,25 +242,34 @@ const PlacementProfile = () => {
     };
   }, []);
 
+
   const handleNotificationClick = () => {
     setShowNotifications((prev) => !prev);
+
     setShowMessages(false);
   };
 
   const handleMessageClick = () => {
     setShowMessages((prev) => !prev);
+
     setShowNotifications(false);
   };
 
   const validateForm = () => {
     const newErrors = {};
 
+   
+
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
-    } else if (formData.name.trim().length < 2) {
+    } else if (
+      formData.name.trim().length < 2
+    ) {
       newErrors.name =
         "Name must be at least 2 characters";
     }
+
+    
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -206,11 +282,13 @@ const PlacementProfile = () => {
         "Please enter a valid email address";
     }
 
+  
+
     if (!formData.phone.trim()) {
       newErrors.phone =
         "Phone number is required";
     } else if (
-      !/^\+?[\d\s\-()]{10,}$/.test(
+      !/^[\d\s\-()]{7,}$/.test(
         formData.phone
       )
     ) {
@@ -224,7 +302,8 @@ const PlacementProfile = () => {
     }
 
     if (!formData.address.trim()) {
-      newErrors.address = "Address is required";
+      newErrors.address =
+        "Address is required";
     } else if (
       formData.address.trim().length < 5
     ) {
@@ -252,7 +331,7 @@ const PlacementProfile = () => {
       newErrors.institutePhone =
         "Institute phone is required";
     } else if (
-      !/^\+?[\d\s\-()]{10,}$/.test(
+      !/^[\d\s\-()]{7,}$/.test(
         formData.institutePhone
       )
     ) {
@@ -295,11 +374,15 @@ const PlacementProfile = () => {
         "Experience is required";
     }
 
-    if (!formData.professionalAddress.trim()) {
+
+    if (
+      !formData.professionalAddress.trim()
+    ) {
       newErrors.professionalAddress =
         "Institute address is required";
     } else if (
-      formData.professionalAddress.trim().length < 5
+      formData.professionalAddress.trim()
+        .length < 5
     ) {
       newErrors.professionalAddress =
         "Institute address must be at least 5 characters";
@@ -328,14 +411,21 @@ const PlacementProfile = () => {
     }
   };
 
+
   const handleEditClick = () => {
     setIsEditing(true);
+
     setErrors({});
+
     setDocumentError("");
+
     setProfilePictureError("");
+
     setSuccessMessage("");
+
     setErrorMessage("");
   };
+
 
   const handleProfilePictureChange = (e) => {
     const file = e.target.files?.[0];
@@ -345,6 +435,7 @@ const PlacementProfile = () => {
     }
 
     setProfilePictureError("");
+
     setErrorMessage("");
 
     const allowedTypes = [
@@ -359,11 +450,13 @@ const PlacementProfile = () => {
       ".png",
     ];
 
-    const fileName = file.name.toLowerCase();
+    const fileName =
+      file.name.toLowerCase();
 
     const hasValidExtension =
-      allowedExtensions.some((extension) =>
-        fileName.endsWith(extension)
+      allowedExtensions.some(
+        (extension) =>
+          fileName.endsWith(extension)
       );
 
     if (
@@ -375,10 +468,12 @@ const PlacementProfile = () => {
       );
 
       e.target.value = "";
+
       return;
     }
 
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize =
+      5 * 1024 * 1024;
 
     if (file.size > maxSize) {
       setProfilePictureError(
@@ -386,10 +481,12 @@ const PlacementProfile = () => {
       );
 
       e.target.value = "";
+
       return;
     }
 
-    const imageUrl = URL.createObjectURL(file);
+    const imageUrl =
+      URL.createObjectURL(file);
 
     setProfilePicture(imageUrl);
 
@@ -400,31 +497,49 @@ const PlacementProfile = () => {
 
   const handleDeleteProfilePicture = () => {
     setProfilePicture(null);
+
     setProfilePictureError("");
+
     setErrorMessage("");
   };
 
+
   const handleCancel = () => {
     setFormData(savedFormData);
+
     setDocuments(savedDocuments);
+
     setProfilePicture(savedProfilePicture);
+
+    setPhoneCountryCode(
+      savedPhoneCountryCode
+    );
+
+    setInstituteCountryCode(
+      savedInstituteCountryCode
+    );
 
     setIsEditing(false);
 
     setErrors({});
+
     setDocumentError("");
+
     setProfilePictureError("");
+
     setSuccessMessage("");
+
     setErrorMessage("");
   };
 
   const handleSaveChanges = () => {
     const newErrors = validateForm();
 
-    if (Object.keys(newErrors).length > 0) {
+    if (
+      Object.keys(newErrors).length > 0
+    ) {
       setErrors(newErrors);
 
-     
       setErrorMessage(
         "Please fix the validation errors before saving."
       );
@@ -435,8 +550,20 @@ const PlacementProfile = () => {
     }
 
     setSavedFormData(formData);
+
     setSavedDocuments(documents);
-    setSavedProfilePicture(profilePicture);
+
+    setSavedProfilePicture(
+      profilePicture
+    );
+
+    setSavedPhoneCountryCode(
+      phoneCountryCode
+    );
+
+    setSavedInstituteCountryCode(
+      instituteCountryCode
+    );
 
     setSuccessMessage(
       "Profile updated successfully!"
@@ -447,7 +574,9 @@ const PlacementProfile = () => {
     setIsEditing(false);
 
     setErrors({});
+
     setDocumentError("");
+
     setProfilePictureError("");
 
     setTimeout(() => {
@@ -455,12 +584,14 @@ const PlacementProfile = () => {
     }, 3000);
   };
 
+
   const handleAddDocument = (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
     setDocumentError("");
+
     setErrorMessage("");
 
     const allowedTypes = [
@@ -477,11 +608,13 @@ const PlacementProfile = () => {
       ".png",
     ];
 
-    const fileName = file.name.toLowerCase();
+    const fileName =
+      file.name.toLowerCase();
 
     const hasValidExtension =
-      allowedExtensions.some((extension) =>
-        fileName.endsWith(extension)
+      allowedExtensions.some(
+        (extension) =>
+          fileName.endsWith(extension)
       );
 
     if (
@@ -493,10 +626,12 @@ const PlacementProfile = () => {
       );
 
       e.target.value = "";
+
       return;
     }
 
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize =
+      5 * 1024 * 1024;
 
     if (file.size > maxSize) {
       setDocumentError(
@@ -504,6 +639,7 @@ const PlacementProfile = () => {
       );
 
       e.target.value = "";
+
       return;
     }
 
@@ -529,10 +665,16 @@ const PlacementProfile = () => {
     }
 
     const newDocument = {
-      id: Date.now() + Math.random(),
+      id:
+        Date.now() +
+        Math.random(),
+
       name: file.name,
+
       icon: documentIcon,
+
       file,
+
       url: fileUrl,
     };
 
@@ -546,10 +688,13 @@ const PlacementProfile = () => {
     e.target.value = "";
   };
 
-  const handleDeleteDocument = (documentId) => {
+  const handleDeleteDocument = (
+    documentId
+  ) => {
     setDocuments((prev) =>
       prev.filter(
-        (doc) => doc.id !== documentId
+        (doc) =>
+          doc.id !== documentId
       )
     );
 
@@ -572,7 +717,9 @@ const PlacementProfile = () => {
     );
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (
+    dateString
+  ) => {
     if (!dateString) return "";
 
     const date = new Date(
@@ -592,11 +739,10 @@ const PlacementProfile = () => {
   return (
     <div className="placement-profile-page">
 
-     
-
       <header className="placement-header">
 
         <div className="placement-search">
+
           <img
             src={Search}
             alt="Search"
@@ -606,16 +752,17 @@ const PlacementProfile = () => {
             type="text"
             placeholder="Search companies, drives..."
           />
+
         </div>
 
         <div className="placement-header-right">
 
-        
 
           <div
             className="placement-header-action"
             ref={notificationRef}
           >
+
             <button
               type="button"
               className={`placement-header-icon ${
@@ -623,13 +770,17 @@ const PlacementProfile = () => {
                   ? "active"
                   : ""
               }`}
-              onClick={handleNotificationClick}
+              onClick={
+                handleNotificationClick
+              }
               aria-label="Notifications"
             >
+
               <img
                 src={Notification}
                 alt="Notifications"
               />
+
             </button>
 
             {showNotifications && (
@@ -638,16 +789,23 @@ const PlacementProfile = () => {
                 <div className="placement-dropdown-header">
 
                   <div>
-                    <h4>Notifications</h4>
+
+                    <h4>
+                      Notifications
+                    </h4>
+
                     <span>
                       5 new notifications
                     </span>
+
                   </div>
 
                   <button
                     type="button"
                     onClick={() =>
-                      setShowNotifications(false)
+                      setShowNotifications(
+                        false
+                      )
                     }
                   >
                     ×
@@ -661,7 +819,9 @@ const PlacementProfile = () => {
                     (notification) => (
                       <div
                         className="placement-notification-item"
-                        key={notification.id}
+                        key={
+                          notification.id
+                        }
                       >
 
                         <div className="placement-notification-dot">
@@ -671,15 +831,21 @@ const PlacementProfile = () => {
                         <div className="placement-dropdown-content">
 
                           <strong>
-                            {notification.title}
+                            {
+                              notification.title
+                            }
                           </strong>
 
                           <p>
-                            {notification.text}
+                            {
+                              notification.text
+                            }
                           </p>
 
                           <small>
-                            {notification.time}
+                            {
+                              notification.time
+                            }
                           </small>
 
                         </div>
@@ -694,7 +860,9 @@ const PlacementProfile = () => {
                   type="button"
                   className="placement-dropdown-footer"
                   onClick={() =>
-                    setShowNotifications(false)
+                    setShowNotifications(
+                      false
+                    )
                   }
                 >
                   View all notifications
@@ -702,14 +870,14 @@ const PlacementProfile = () => {
 
               </div>
             )}
-          </div>
 
-        
+          </div>
 
           <div
             className="placement-header-action"
             ref={messageRef}
           >
+
             <button
               type="button"
               className={`placement-header-icon ${
@@ -717,13 +885,17 @@ const PlacementProfile = () => {
                   ? "active"
                   : ""
               }`}
-              onClick={handleMessageClick}
+              onClick={
+                handleMessageClick
+              }
               aria-label="Messages"
             >
+
               <img
                 src={Message}
                 alt="Messages"
               />
+
             </button>
 
             {showMessages && (
@@ -732,16 +904,23 @@ const PlacementProfile = () => {
                 <div className="placement-dropdown-header">
 
                   <div>
-                    <h4>Messages</h4>
+
+                    <h4>
+                      Messages
+                    </h4>
+
                     <span>
                       3 unread messages
                     </span>
+
                   </div>
 
                   <button
                     type="button"
                     onClick={() =>
-                      setShowMessages(false)
+                      setShowMessages(
+                        false
+                      )
                     }
                   >
                     ×
@@ -751,36 +930,38 @@ const PlacementProfile = () => {
 
                 <div className="placement-dropdown-list">
 
-                  {messages.map((message) => (
-                    <div
-                      className="placement-message-item"
-                      key={message.id}
-                    >
+                  {messages.map(
+                    (message) => (
+                      <div
+                        className="placement-message-item"
+                        key={message.id}
+                      >
 
-                      <div className="placement-message-avatar">
-                        {message.name
-                          .charAt(0)
-                          .toUpperCase()}
+                        <div className="placement-message-avatar">
+                          {message.name
+                            .charAt(0)
+                            .toUpperCase()}
+                        </div>
+
+                        <div className="placement-dropdown-content">
+
+                          <strong>
+                            {message.name}
+                          </strong>
+
+                          <p>
+                            {message.text}
+                          </p>
+
+                          <small>
+                            {message.time}
+                          </small>
+
+                        </div>
+
                       </div>
-
-                      <div className="placement-dropdown-content">
-
-                        <strong>
-                          {message.name}
-                        </strong>
-
-                        <p>
-                          {message.text}
-                        </p>
-
-                        <small>
-                          {message.time}
-                        </small>
-
-                      </div>
-
-                    </div>
-                  ))}
+                    )
+                  )}
 
                 </div>
 
@@ -788,7 +969,9 @@ const PlacementProfile = () => {
                   type="button"
                   className="placement-dropdown-footer"
                   onClick={() =>
-                    setShowMessages(false)
+                    setShowMessages(
+                      false
+                    )
                   }
                 >
                   View all messages
@@ -796,9 +979,8 @@ const PlacementProfile = () => {
 
               </div>
             )}
-          </div>
 
-        
+          </div>
 
           <div className="placement-header-profile">
 
@@ -809,7 +991,9 @@ const PlacementProfile = () => {
 
             <div className="placement-header-profile-info">
 
-              <h4>Priyanka</h4>
+              <h4>
+                Priyanka
+              </h4>
 
               <p>
                 Placement Officer
@@ -823,16 +1007,21 @@ const PlacementProfile = () => {
 
       </header>
 
+
       <div className="placement-page-title">
 
-        <h1>My Profile</h1>
+        <h1>
+          My Profile
+        </h1>
 
         <p>
           Manage your personal information,
-          preferences &amp; view your performance.
+          preferences &amp; view your
+          performance.
         </p>
 
       </div>
+
 
       {successMessage && (
         <div className="placement-success-message">
@@ -848,11 +1037,7 @@ const PlacementProfile = () => {
 
       <div className="placement-profile-content">
 
-      
-
         <aside className="placement-left-column">
-
-        
 
           <div className="placement-profile-card">
 
@@ -910,7 +1095,9 @@ const PlacementProfile = () => {
           <button
             type="button"
             className="placement-edit-btn"
-            onClick={handleEditClick}
+            onClick={
+              handleEditClick
+            }
           >
 
             <img
@@ -924,13 +1111,13 @@ const PlacementProfile = () => {
 
           </button>
 
-         
-
           {isEditing && (
             <button
               type="button"
               className="placementOffProfileDeletePhotoButton"
-              onClick={handleDeleteProfilePicture}
+              onClick={
+                handleDeleteProfilePicture
+              }
             >
               Delete Photo
             </button>
@@ -942,6 +1129,7 @@ const PlacementProfile = () => {
                 {profilePictureError}
               </span>
             )}
+
           <div className="placement-professional-card">
 
             <div className="placement-section-heading">
@@ -987,18 +1175,21 @@ const PlacementProfile = () => {
 
                     {errors.employeeId && (
                       <span className="error-text">
-                        {errors.employeeId}
+                        {
+                          errors.employeeId
+                        }
                       </span>
                     )}
                   </>
                 ) : (
                   <span>
-                    {formData.employeeId}
+                    {
+                      formData.employeeId
+                    }
                   </span>
                 )}
 
               </div>
-
               <div className="placement-detail-item">
 
                 <label>
@@ -1025,17 +1216,22 @@ const PlacementProfile = () => {
 
                     {errors.joinedOn && (
                       <span className="error-text">
-                        {errors.joinedOn}
+                        {
+                          errors.joinedOn
+                        }
                       </span>
                     )}
                   </>
                 ) : (
                   <span>
-                    {formData.joinedOn}
+                    {
+                      formData.joinedOn
+                    }
                   </span>
                 )}
 
               </div>
+
 
               <div className="placement-detail-item">
 
@@ -1063,13 +1259,17 @@ const PlacementProfile = () => {
 
                     {errors.designation && (
                       <span className="error-text">
-                        {errors.designation}
+                        {
+                          errors.designation
+                        }
                       </span>
                     )}
                   </>
                 ) : (
                   <span>
-                    {formData.designation}
+                    {
+                      formData.designation
+                    }
                   </span>
                 )}
 
@@ -1103,19 +1303,21 @@ const PlacementProfile = () => {
 
                     {errors.experience && (
                       <span className="error-text">
-                        {errors.experience}
+                        {
+                          errors.experience
+                        }
                       </span>
                     )}
                   </>
                 ) : (
                   <span>
-                    {formData.experience}
+                    {
+                      formData.experience
+                    }
                   </span>
                 )}
 
               </div>
-
-             
 
               <div className="placement-detail-item">
 
@@ -1165,11 +1367,8 @@ const PlacementProfile = () => {
 
         </aside>
 
-    
-
         <main className="placement-right-column">
 
-         
 
           <section className="placement-info-card">
 
@@ -1187,8 +1386,6 @@ const PlacementProfile = () => {
             </div>
 
             <div className="placement-personal-grid">
-
-            
 
               <div className="placement-info-item">
 
@@ -1228,7 +1425,7 @@ const PlacementProfile = () => {
 
               </div>
 
-             
+              
 
               <div className="placement-info-item">
 
@@ -1256,7 +1453,9 @@ const PlacementProfile = () => {
 
                     {errors.dateOfBirth && (
                       <span className="error-text">
-                        {errors.dateOfBirth}
+                        {
+                          errors.dateOfBirth
+                        }
                       </span>
                     )}
                   </>
@@ -1269,8 +1468,6 @@ const PlacementProfile = () => {
                 )}
 
               </div>
-
-           
 
               <div className="placement-info-item">
 
@@ -1310,8 +1507,6 @@ const PlacementProfile = () => {
 
               </div>
 
-        
-
               <div className="placement-info-item">
 
                 <label>
@@ -1350,7 +1545,6 @@ const PlacementProfile = () => {
 
               </div>
 
-             
 
               <div className="placement-info-item">
 
@@ -1360,31 +1554,74 @@ const PlacementProfile = () => {
 
                 {isEditing ? (
                   <>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={
-                        formData.phone
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.phone
-                          ? "input-error"
-                          : ""
-                      }
-                    />
+                    <div className="placement-phone-input-wrapper">
+
+                      <select
+                        value={
+                          phoneCountryCode
+                        }
+                        onChange={(e) =>
+                          setPhoneCountryCode(
+                            e.target.value
+                          )
+                        }
+                        className="placement-country-code-select"
+                      >
+
+                        {COUNTRY_CODES.map(
+                          (country) => (
+                            <option
+                              key={
+                                country.code
+                              }
+                              value={
+                                country.code
+                              }
+                            >
+                              {country.flag}{" "}
+                              {
+                                country.code
+                              }
+                            </option>
+                          )
+                        )}
+
+                      </select>
+
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={
+                          formData.phone
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="Enter phone number"
+                        className={
+                          errors.phone
+                            ? "input-error placement-phone-number-input"
+                            : "placement-phone-number-input"
+                        }
+                      />
+
+                    </div>
 
                     {errors.phone && (
                       <span className="error-text">
                         {errors.phone}
                       </span>
                     )}
+
                   </>
                 ) : (
                   <span>
-                    {formData.phone}
+                    {
+                      phoneCountryCode
+                    }{" "}
+                    {
+                      formData.phone
+                    }
                   </span>
                 )}
 
@@ -1418,7 +1655,9 @@ const PlacementProfile = () => {
 
                     {errors.address && (
                       <span className="error-text">
-                        {errors.address}
+                        {
+                          errors.address
+                        }
                       </span>
                     )}
                   </>
@@ -1433,8 +1672,6 @@ const PlacementProfile = () => {
             </div>
 
           </section>
-
-         
 
           <section className="placement-info-card institute-card">
 
@@ -1481,7 +1718,9 @@ const PlacementProfile = () => {
 
                     {errors.college && (
                       <span className="error-text">
-                        {errors.college}
+                        {
+                          errors.college
+                        }
                       </span>
                     )}
                   </>
@@ -1494,11 +1733,14 @@ const PlacementProfile = () => {
               </div>
 
               <div className="placement-info-item empty-grid-item">
+
                 <label></label>
+
                 <span></span>
+
               </div>
 
-             
+            
 
               <div className="placement-info-item">
 
@@ -1519,13 +1761,15 @@ const PlacementProfile = () => {
                   />
                 ) : (
                   <span>
-                    {formData.university}
+                    {
+                      formData.university
+                    }
                   </span>
                 )}
 
               </div>
 
-           
+            
 
               <div className="placement-info-item">
 
@@ -1554,7 +1798,9 @@ const PlacementProfile = () => {
 
                     {errors.website && (
                       <span className="error-text">
-                        {errors.website}
+                        {
+                          errors.website
+                        }
                       </span>
                     )}
                   </>
@@ -1574,21 +1820,58 @@ const PlacementProfile = () => {
 
                 {isEditing ? (
                   <>
-                    <input
-                      type="tel"
-                      name="institutePhone"
-                      value={
-                        formData.institutePhone
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.institutePhone
-                          ? "input-error"
-                          : ""
-                      }
-                    />
+                    <div className="placement-phone-input-wrapper">
+
+                      <select
+                        value={
+                          instituteCountryCode
+                        }
+                        onChange={(e) =>
+                          setInstituteCountryCode(
+                            e.target.value
+                          )
+                        }
+                        className="placement-country-code-select"
+                      >
+
+                        {COUNTRY_CODES.map(
+                          (country) => (
+                            <option
+                              key={
+                                country.code
+                              }
+                              value={
+                                country.code
+                              }
+                            >
+                              {country.flag}{" "}
+                              {
+                                country.code
+                              }
+                            </option>
+                          )
+                        )}
+
+                      </select>
+
+                      <input
+                        type="tel"
+                        name="institutePhone"
+                        value={
+                          formData.institutePhone
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="Enter institute phone number"
+                        className={
+                          errors.institutePhone
+                            ? "input-error placement-phone-number-input"
+                            : "placement-phone-number-input"
+                        }
+                      />
+
+                    </div>
 
                     {errors.institutePhone && (
                       <span className="error-text">
@@ -1597,10 +1880,16 @@ const PlacementProfile = () => {
                         }
                       </span>
                     )}
+
                   </>
                 ) : (
                   <span>
-                    {formData.institutePhone}
+                    {
+                      instituteCountryCode
+                    }{" "}
+                    {
+                      formData.institutePhone
+                    }
                   </span>
                 )}
 
@@ -1652,8 +1941,6 @@ const PlacementProfile = () => {
 
           </section>
 
-          
-
           <section className="placement-documents-card">
 
             <div className="placement-section-heading">
@@ -1676,59 +1963,62 @@ const PlacementProfile = () => {
                   No documents available.
                 </div>
               ) : (
-                documents.map((doc) => (
-                  <div
-                    className="placement-document-item"
-                    key={doc.id}
-                  >
+                documents.map(
+                  (doc) => (
+                    <div
+                      className="placement-document-item"
+                      key={doc.id}
+                    >
 
-                    <div className="placement-document-name">
+                      <div className="placement-document-name">
 
-                      <img
-                        src={doc.icon}
-                        alt={doc.name}
-                      />
+                        <img
+                          src={doc.icon}
+                          alt={doc.name}
+                        />
 
-                      <span>
-                        {doc.name}
-                      </span>
+                        <span>
+                          {doc.name}
+                        </span>
 
-                    </div>
+                      </div>
 
-                    <div className="placement-document-actions">
+                      <div className="placement-document-actions">
 
-                      <button
-                        type="button"
-                        className="placement-view-btn"
-                        onClick={() =>
-                          handleViewDocument(doc)
-                        }
-                      >
-                        View
-                      </button>
-
-                      {isEditing && (
                         <button
                           type="button"
-                          className="placement-delete-btn"
+                          className="placement-view-btn"
                           onClick={() =>
-                            handleDeleteDocument(
-                              doc.id
+                            handleViewDocument(
+                              doc
                             )
                           }
                         >
-                          Delete
+                          View
                         </button>
-                      )}
+
+                        {isEditing && (
+                          <button
+                            type="button"
+                            className="placement-delete-btn"
+                            onClick={() =>
+                              handleDeleteDocument(
+                                doc.id
+                              )
+                            }
+                          >
+                            Delete
+                          </button>
+                        )}
+
+                      </div>
 
                     </div>
-
-                  </div>
-                ))
+                  )
+                )
               )}
 
             </div>
-
 
             {isEditing && (
               <div className="placement-add-document">
@@ -1768,15 +2058,15 @@ const PlacementProfile = () => {
           </section>
 
         </main>
-
-
         {isEditing && (
           <div className="placement-profile-actions">
 
             <button
               type="button"
               className="placement-cancel-btn"
-              onClick={handleCancel}
+              onClick={
+                handleCancel
+              }
             >
               Cancel
             </button>
@@ -1784,7 +2074,9 @@ const PlacementProfile = () => {
             <button
               type="button"
               className="placement-save-btn"
-              onClick={handleSaveChanges}
+              onClick={
+                handleSaveChanges
+              }
             >
               Save Changes
             </button>
