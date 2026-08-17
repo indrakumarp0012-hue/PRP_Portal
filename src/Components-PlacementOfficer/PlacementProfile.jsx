@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PlacementProfile.css";
+
 import Search from "../assets/PlacementProfileAssets/Search.png";
 import Notification from "../assets/PlacementProfileAssets/Notifiction.png";
 import Message from "../assets/PlacementProfileAssets/Message.png";
