@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PlacementProfile.css";
-
 import Search from "../assets/PlacementProfileAssets/Search.png";
-import Notification from "../assets/PlacementProfileAssets/Notifiction.png";
+import Notification from "../assets/PlacementProfileAssets/Notification.png";
 import Message from "../assets/PlacementProfileAssets/Message.png";
 import Profile1 from "../assets/PlacementProfileAssets/Profile1.png";
 import Profile2 from "../assets/PlacementProfileAssets/Profile2.png";
@@ -12,9 +11,6 @@ import Personal from "../assets/PlacementProfileAssets/Personal.png";
 import Institute from "../assets/PlacementProfileAssets/Institute.png";
 import Document from "../assets/PlacementProfileAssets/Document.png";
 import Employee from "../assets/PlacementProfileAssets/Employee.png";
-import Appointment from "../assets/PlacementProfileAssets/Appointment.png";
-import Certificate from "../assets/PlacementProfileAssets/Certificate.png";
-
 
 const COUNTRY_CODES = [
   {
@@ -59,1938 +55,1530 @@ const COUNTRY_CODES = [
   },
 ];
 
-const PlacementProfile = () => {
-  const initialFormData = {
-    name: "Priyanka J",
-    dateOfBirth: "1988-10-14",
-    email: "priya5@eduhire.com",
-    gender: "Female",
+const initialFormData = {
+  name: "Priyanka J",
+  dateOfBirth: "October 14, 1988",
+  email: "priya5@eduhire.com",
+  gender: "Female",
 
-    phone: "012-345-6789",
-    institutePhone: "012-345-6789",
+  phoneCountryCode: "+1",
+  phone: "(555) 012-3456",
 
-    address: "745 ECR Road, Chennai - 100010",
+  address: "745 ECR road, Chennai - 100010",
 
-    college: "Govt. Eng. College, CBE",
-    university: "Anna University",
-    website: "www.gec.in",
+  college: "Govt. Eng. College, CBE",
+  affiliatedUniversity: "Anna University",
+  website: "www.gec.in",
 
-    instituteAddress:
-      "745 ECR Road, Coimbatore - 100010",
+  institutionPhoneCountryCode: "+1",
+  institutionPhone: "(555) 012-3456",
+  institutionAddress: "745 ECR road, Coimbatore - 100010",
 
-    employeeId: "PO-2024-2349",
-    joinedOn: "Apr 15, 2024",
-    designation: "Placement Officer",
-    experience: "6+ years",
+  employeeId: "PO-2024-2349",
+  joinedOn: "Apr 15, 2024",
+  designation: "Placement Officer",
+  experience: "6+ years",
+  professionalAddress: "745 OMR road, Chennai - 105215",
+};
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    professionalAddress:
-      "745 OMR Road, Chennai - 105215",
-  };
+const PHONE_REGEX = /^\+?[\d\s()-]{7,20}$/;
 
-  const initialDocuments = [
-    {
-      id: 1,
-      name: "Employee ID Card",
-      icon: Employee,
-      file: null,
-      url: null,
-    },
-    {
-      id: 2,
-      name: "Appointment Letter",
-      icon: Appointment,
-      file: null,
-      url: null,
-    },
-    {
-      id: 3,
-      name: "Certificates",
-      icon: Certificate,
-      file: null,
-      url: null,
-    },
-  ];
+const WEBSITE_REGEX =
+  /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+
+
+const ALLOWED_DOCUMENT_TYPES = [
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+];
+
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+];
+
+const initialDocuments = [
+  {
+    id: 1,
+    name: "Employee ID Card",
+    fileName: "Employee_ID_Card.pdf",
+  },
+  {
+    id: 2,
+    name: "Appointment Letter",
+    fileName: "Appointment_Letter.pdf",
+  },
+  {
+    id: 3,
+    name: "Certificates",
+    fileName: "Certificates.pdf",
+  },
+];
+
+const initialNotifications = [
+  {
+    id: 1,
+    text: "New placement drive scheduled for Aug 20.",
+  },
+  {
+    id: 2,
+    text: "3 students updated their resumes.",
+  },
+];
+
+const initialMessages = [
+  {
+    id: 1,
+    text: "HR Manager: Please confirm interview slots.",
+  },
+];
+
+const PlacementOffProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [formData, setFormData] =
-    useState(initialFormData);
+  const [formData, setFormData] = useState({
+    ...initialFormData,
+  });
 
-  const [savedFormData, setSavedFormData] =
-    useState(initialFormData);
-
-  const [documents, setDocuments] =
-    useState(initialDocuments);
-
-  const [savedDocuments, setSavedDocuments] =
-    useState(initialDocuments);
+  const [savedFormData, setSavedFormData] = useState({
+    ...initialFormData,
+  });
 
   const [errors, setErrors] = useState({});
 
-  const [documentError, setDocumentError] =
-    useState("");
+  const [documents, setDocuments] = useState([
+    ...initialDocuments,
+  ]);
+
+  const [savedDocuments, setSavedDocuments] = useState([
+    ...initialDocuments,
+  ]);
+
+  const [documentError, setDocumentError] = useState("");
+
+
+  const [profilePicture, setProfilePicture] =
+    useState(Profile1);
+
+  const [
+    isProfilePictureDeleted,
+    setIsProfilePictureDeleted,
+  ] = useState(false);
+
+  const [previewPicture, setPreviewPicture] =
+    useState(null);
+
+  const [previewDeleted, setPreviewDeleted] =
+    useState(false);
 
   const [profilePictureError, setProfilePictureError] =
     useState("");
 
-  const [successMessage, setSuccessMessage] =
-    useState("");
+  const [notifications] = useState(
+    initialNotifications
+  );
 
-  const [errorMessage, setErrorMessage] =
-    useState("");
-
-  const [showNotifications, setShowNotifications] =
-    useState(false);
-
-  const [showMessages, setShowMessages] =
-    useState(false);
-
-  const [profilePicture, setProfilePicture] =
-    useState(Profile2);
-
-  const [savedProfilePicture, setSavedProfilePicture] =
-    useState(Profile2);
-  const [phoneCountryCode, setPhoneCountryCode] =
-    useState("+91");
-
-  const [savedPhoneCountryCode, setSavedPhoneCountryCode] =
-    useState("+91");
-
-  const [instituteCountryCode, setInstituteCountryCode] =
-    useState("+91");
+  const [messages] = useState(initialMessages);
 
   const [
-    savedInstituteCountryCode,
-    setSavedInstituteCountryCode,
-  ] = useState("+91");
+    isNotificationsOpen,
+    setIsNotificationsOpen,
+  ] = useState(false);
 
+  const [
+    isMessagesOpen,
+    setIsMessagesOpen,
+  ] = useState(false);
 
-  const notificationRef = useRef(null);
-
-  const messageRef = useRef(null);
-
-  const notifications = [
-    {
-      id: 1,
-      title: "New placement drive",
-      text: "A new placement drive has been added.",
-      time: "5 min ago",
-    },
-    {
-      id: 2,
-      title: "Profile update",
-      text: "Your profile information was viewed.",
-      time: "20 min ago",
-    },
-    {
-      id: 3,
-      title: "Interview scheduled",
-      text: "An interview has been scheduled.",
-      time: "1 hour ago",
-    },
-  ];
-
-  const messages = [
-    {
-      id: 1,
-      name: "Placement Team",
-      text: "Please review the latest placement updates.",
-      time: "10 min ago",
-    },
-    {
-      id: 2,
-      name: "HR Department",
-      text: "New candidate documents are available.",
-      time: "30 min ago",
-    },
-    {
-      id: 3,
-      name: "Anna University",
-      text: "Placement coordination meeting reminder.",
-      time: "2 hours ago",
-    },
-  ];
-
+  const notificationsRef = useRef(null);
+  const messagesRef = useRef(null);
 
   useEffect(() => {
-    const handleOutsideClick = (event) => {
+    const handleClickOutside = (event) => {
       if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event.target)
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target)
       ) {
-        setShowNotifications(false);
+        setIsNotificationsOpen(false);
       }
 
       if (
-        messageRef.current &&
-        !messageRef.current.contains(event.target)
+        messagesRef.current &&
+        !messagesRef.current.contains(event.target)
       ) {
-        setShowMessages(false);
+        setIsMessagesOpen(false);
       }
     };
 
     document.addEventListener(
       "mousedown",
-      handleOutsideClick
+      handleClickOutside
     );
 
     return () => {
       document.removeEventListener(
         "mousedown",
-        handleOutsideClick
+        handleClickOutside
       );
     };
   }, []);
 
+  const handleToggleNotifications = () => {
+    setIsNotificationsOpen(
+      (previous) => !previous
+    );
 
-  const handleNotificationClick = () => {
-    setShowNotifications((prev) => !prev);
-
-    setShowMessages(false);
+    setIsMessagesOpen(false);
   };
 
-  const handleMessageClick = () => {
-    setShowMessages((prev) => !prev);
 
-    setShowNotifications(false);
+  const handleToggleMessages = () => {
+    setIsMessagesOpen(
+      (previous) => !previous
+    );
+
+    setIsNotificationsOpen(false);
+  };
+
+  const committedProfileImage =
+    isProfilePictureDeleted
+      ? null
+      : profilePicture;
+
+  const displayedProfileImage = isEditing
+    ? previewPicture
+      ? previewPicture
+      : previewDeleted
+      ? null
+      : committedProfileImage
+    : committedProfileImage;
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    setErrors((previous) => {
+      if (!previous[name]) {
+        return previous;
+      }
+
+      const nextErrors = {
+        ...previous,
+      };
+
+      delete nextErrors[name];
+
+      return nextErrors;
+    });
   };
 
   const validateForm = () => {
     const newErrors = {};
 
-   
-
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (
-      formData.name.trim().length < 2
-    ) {
-      newErrors.name =
-        "Name must be at least 2 characters";
+      newErrors.name = "Name is required.";
     }
 
-    
+    if (!formData.dateOfBirth.trim()) {
+      newErrors.dateOfBirth =
+        "Date of birth is required.";
+    } else if (
+      Number.isNaN(Date.parse(formData.dateOfBirth))
+    ) {
+      newErrors.dateOfBirth =
+        "Enter a valid date.";
+    }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Email is required.";
     } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-        formData.email
-      )
+      !EMAIL_REGEX.test(formData.email.trim())
     ) {
       newErrors.email =
-        "Please enter a valid email address";
+        "Enter a valid email address.";
     }
 
-  
+    if (!formData.gender.trim()) {
+      newErrors.gender = "Gender is required.";
+    }
 
     if (!formData.phone.trim()) {
       newErrors.phone =
-        "Phone number is required";
+        "Phone number is required.";
     } else if (
-      !/^[\d\s\-()]{7,}$/.test(
-        formData.phone
-      )
+      !PHONE_REGEX.test(formData.phone.trim())
     ) {
       newErrors.phone =
-        "Please enter a valid phone number";
-    }
-
-    if (!formData.dateOfBirth) {
-      newErrors.dateOfBirth =
-        "Date of birth is required";
+        "Enter a valid phone number.";
     }
 
     if (!formData.address.trim()) {
       newErrors.address =
-        "Address is required";
-    } else if (
-      formData.address.trim().length < 5
-    ) {
-      newErrors.address =
-        "Address must be at least 5 characters";
+        "Address is required.";
     }
 
     if (!formData.college.trim()) {
       newErrors.college =
-        "College/University is required";
+        "College/University is required.";
     }
 
-    if (formData.website.trim()) {
-      if (
-        !/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/.test(
-          formData.website
-        )
-      ) {
-        newErrors.website =
-          "Please enter a valid website URL";
-      }
+    if (!formData.affiliatedUniversity.trim()) {
+      newErrors.affiliatedUniversity =
+        "Affiliated University is required.";
     }
 
-    if (!formData.institutePhone.trim()) {
-      newErrors.institutePhone =
-        "Institute phone is required";
+    if (
+      formData.website.trim() &&
+      !WEBSITE_REGEX.test(formData.website.trim())
+    ) {
+      newErrors.website =
+        "Enter a valid website.";
+    }
+
+    if (!formData.institutionPhone.trim()) {
+      newErrors.institutionPhone =
+        "Institution phone number is required.";
     } else if (
-      !/^[\d\s\-()]{7,}$/.test(
-        formData.institutePhone
+      !PHONE_REGEX.test(
+        formData.institutionPhone.trim()
       )
     ) {
-      newErrors.institutePhone =
-        "Please enter a valid phone number";
+      newErrors.institutionPhone =
+        "Enter a valid phone number.";
     }
 
-    if (!formData.instituteAddress.trim()) {
-      newErrors.instituteAddress =
-        "Institute address is required";
-    } else if (
-      formData.instituteAddress.trim().length < 5
-    ) {
-      newErrors.instituteAddress =
-        "Address must be at least 5 characters";
+    if (!formData.institutionAddress.trim()) {
+      newErrors.institutionAddress =
+        "Institution address is required.";
     }
 
     if (!formData.employeeId.trim()) {
       newErrors.employeeId =
-        "Employee ID is required";
+        "Employee ID is required.";
     }
 
     if (!formData.joinedOn.trim()) {
       newErrors.joinedOn =
-        "Joined On is required";
+        "Joined On is required.";
     }
 
     if (!formData.designation.trim()) {
       newErrors.designation =
-        "Designation is required";
-    } else if (
-      formData.designation.trim().length < 2
-    ) {
-      newErrors.designation =
-        "Designation must be at least 2 characters";
+        "Designation is required.";
     }
 
     if (!formData.experience.trim()) {
       newErrors.experience =
-        "Experience is required";
+        "Experience is required.";
     }
 
-
-    if (
-      !formData.professionalAddress.trim()
-    ) {
+    if (!formData.professionalAddress.trim()) {
       newErrors.professionalAddress =
-        "Institute address is required";
-    } else if (
-      formData.professionalAddress.trim()
-        .length < 5
-    ) {
-      newErrors.professionalAddress =
-        "Institute address must be at least 5 characters";
+        "Institute address is required.";
     }
 
-    return newErrors;
-  };
+    setErrors(newErrors);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-
-    if (errorMessage) {
-      setErrorMessage("");
-    }
+    return Object.keys(newErrors).length === 0;
   };
 
 
   const handleEditClick = () => {
     setIsEditing(true);
-
     setErrors({});
-
     setDocumentError("");
-
     setProfilePictureError("");
-
-    setSuccessMessage("");
-
-    setErrorMessage("");
+    setPreviewPicture(null);
+    setPreviewDeleted(false);
   };
 
 
-  const handleProfilePictureChange = (e) => {
-    const file = e.target.files?.[0];
+  const handleSave = () => {
+    const isValid = validateForm();
 
-    if (!file) {
+    if (!isValid) {
       return;
     }
 
-    setProfilePictureError("");
+    const nextProfilePicture =
+      previewPicture || profilePicture;
 
-    setErrorMessage("");
+    const nextIsProfilePictureDeleted =
+      previewPicture
+        ? false
+        : previewDeleted
+        ? true
+        : isProfilePictureDeleted;
 
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-    ];
+    setSavedFormData({
+      ...formData,
+    });
 
-    const allowedExtensions = [
-      ".jpg",
-      ".jpeg",
-      ".png",
-    ];
+    setSavedDocuments([
+      ...documents,
+    ]);
 
-    const fileName =
-      file.name.toLowerCase();
-
-    const hasValidExtension =
-      allowedExtensions.some(
-        (extension) =>
-          fileName.endsWith(extension)
-      );
-
-    if (
-      !allowedTypes.includes(file.type) &&
-      !hasValidExtension
-    ) {
-      setProfilePictureError(
-        "Only JPG, JPEG or PNG files are allowed."
-      );
-
-      e.target.value = "";
-
-      return;
+    if (previewPicture) {
+      setProfilePicture(previewPicture);
     }
 
-    const maxSize =
-      5 * 1024 * 1024;
+    setIsProfilePictureDeleted(
+      nextIsProfilePictureDeleted
+    );
 
-    if (file.size > maxSize) {
-      setProfilePictureError(
-        "Profile photo must be less than or equal to 5 MB."
-      );
-
-      e.target.value = "";
-
-      return;
-    }
-
-    const imageUrl =
-      URL.createObjectURL(file);
-
-    setProfilePicture(imageUrl);
-
+    setPreviewPicture(null);
+    setPreviewDeleted(false);
     setProfilePictureError("");
-
-    e.target.value = "";
-  };
-
-  const handleDeleteProfilePicture = () => {
-    setProfilePicture(null);
-
-    setProfilePictureError("");
-
-    setErrorMessage("");
+    setDocumentError("");
+    setErrors({});
+    setIsEditing(false);
   };
 
 
   const handleCancel = () => {
-    setFormData(savedFormData);
+    setFormData({
+      ...savedFormData,
+    });
 
-    setDocuments(savedDocuments);
-
-    setProfilePicture(savedProfilePicture);
-
-    setPhoneCountryCode(
-      savedPhoneCountryCode
-    );
-
-    setInstituteCountryCode(
-      savedInstituteCountryCode
-    );
-
-    setIsEditing(false);
-
-    setErrors({});
-
-    setDocumentError("");
-
-    setProfilePictureError("");
-
-    setSuccessMessage("");
-
-    setErrorMessage("");
-  };
-
-  const handleSaveChanges = () => {
-    const newErrors = validateForm();
-
-    if (
-      Object.keys(newErrors).length > 0
-    ) {
-      setErrors(newErrors);
-
-      setErrorMessage(
-        "Please fix the validation errors before saving."
-      );
-
-      setSuccessMessage("");
-
-      return;
-    }
-
-    setSavedFormData(formData);
-
-    setSavedDocuments(documents);
-
-    setSavedProfilePicture(
-      profilePicture
-    );
-
-    setSavedPhoneCountryCode(
-      phoneCountryCode
-    );
-
-    setSavedInstituteCountryCode(
-      instituteCountryCode
-    );
-
-    setSuccessMessage(
-      "Profile updated successfully!"
-    );
-
-    setErrorMessage("");
-
-    setIsEditing(false);
-
-    setErrors({});
-
-    setDocumentError("");
-
-    setProfilePictureError("");
-
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
-  };
-
-
-  const handleAddDocument = (e) => {
-    const file = e.target.files?.[0];
-
-    if (!file) return;
-
-    setDocumentError("");
-
-    setErrorMessage("");
-
-    const allowedTypes = [
-      "application/pdf",
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-    ];
-
-    const allowedExtensions = [
-      ".pdf",
-      ".jpg",
-      ".jpeg",
-      ".png",
-    ];
-
-    const fileName =
-      file.name.toLowerCase();
-
-    const hasValidExtension =
-      allowedExtensions.some(
-        (extension) =>
-          fileName.endsWith(extension)
-      );
-
-    if (
-      !allowedTypes.includes(file.type) &&
-      !hasValidExtension
-    ) {
-      setDocumentError(
-        "Only PDF, JPG, JPEG or PNG files are allowed."
-      );
-
-      e.target.value = "";
-
-      return;
-    }
-
-    const maxSize =
-      5 * 1024 * 1024;
-
-    if (file.size > maxSize) {
-      setDocumentError(
-        "File size must be less than or equal to 5 MB."
-      );
-
-      e.target.value = "";
-
-      return;
-    }
-
-    const fileUrl =
-      URL.createObjectURL(file);
-
-    let documentIcon = Certificate;
-
-    if (
-      file.type === "application/pdf" ||
-      fileName.endsWith(".pdf")
-    ) {
-      documentIcon = Document;
-    } else if (
-      fileName.includes("employee") ||
-      fileName.includes("id")
-    ) {
-      documentIcon = Employee;
-    } else if (
-      fileName.includes("appointment")
-    ) {
-      documentIcon = Appointment;
-    }
-
-    const newDocument = {
-      id:
-        Date.now() +
-        Math.random(),
-
-      name: file.name,
-
-      icon: documentIcon,
-
-      file,
-
-      url: fileUrl,
-    };
-
-    setDocuments((prev) => [
-      ...prev,
-      newDocument,
+    setDocuments([
+      ...savedDocuments,
     ]);
 
+    setErrors({});
     setDocumentError("");
-
-    e.target.value = "";
+    setPreviewPicture(null);
+    setPreviewDeleted(false);
+    setProfilePictureError("");
+    setIsEditing(false);
   };
 
-  const handleDeleteDocument = (
-    documentId
-  ) => {
-    setDocuments((prev) =>
-      prev.filter(
-        (doc) =>
-          doc.id !== documentId
-      )
-    );
+  const handleProfilePictureChange = (event) => {
+    const file = event.target.files?.[0];
 
-    setDocumentError("");
+    if (!file) {
+      setProfilePictureError(
+        "Please select an image."
+      );
+
+      return;
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setProfilePictureError(
+        "Only JPG and PNG images are allowed."
+      );
+
+      event.target.value = "";
+
+      return;
+    }
+
+  
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setPreviewPicture(reader.result);
+      setPreviewDeleted(false);
+      setProfilePictureError("");
+    };
+
+    reader.onerror = () => {
+      setProfilePictureError(
+        "Unable to read the selected image."
+      );
+    };
+
+    reader.readAsDataURL(file);
+
+    event.target.value = "";
   };
 
-  const handleViewDocument = (doc) => {
-    if (doc.url) {
+  const handleDeleteProfilePicture = () => {
+    setPreviewPicture(null);
+    setPreviewDeleted(true);
+    setProfilePictureError("");
+  };
+
+
+  const handleViewDocument = (document) => {
+    if (document.url) {
       window.open(
-        doc.url,
+        document.url,
         "_blank",
         "noopener,noreferrer"
       );
+    } else {
+      alert(
+        `${document.name} is available in the profile.`
+      );
+    }
+  };
+
+
+  const handleDeleteDocument = (documentId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this document?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setDocuments(
+      (previousDocuments) =>
+        previousDocuments.filter(
+          (document) =>
+            document.id !== documentId
+        )
+    );
+  };
+
+  const handleAddDocument = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      setDocumentError(
+        "Please select a file."
+      );
 
       return;
     }
 
-    alert(
-      `${doc.name} is currently available as a document record, but no file has been uploaded yet.`
-    );
-  };
+    if (
+      !ALLOWED_DOCUMENT_TYPES.includes(file.type)
+    ) {
+      setDocumentError(
+        "Only PDF, JPG, and PNG files are allowed."
+      );
 
-  const formatDate = (
-    dateString
-  ) => {
-    if (!dateString) return "";
+      event.target.value = "";
 
-    const date = new Date(
-      `${dateString}T00:00:00`
+      return;
+    }
+
+   
+    const newDocument = {
+      id: Date.now(),
+      name: file.name,
+      fileName: file.name,
+      url: URL.createObjectURL(file),
+    };
+
+    setDocuments(
+      (previousDocuments) => [
+        ...previousDocuments,
+        newDocument,
+      ]
     );
 
-    return date.toLocaleDateString(
-      "en-US",
-      {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }
-    );
+    setDocumentError("");
+
+    event.target.value = "";
   };
 
   return (
-    <div className="placement-profile-page">
+    <main className="placementOffProfileMain">
+      <div className="placementOffProfileContent">
 
-      <header className="placement-header">
+        <header className="placementOffProfileHeader">
 
-        <div className="placement-search">
+          <div className="placementOffProfileSearchBar">
+            <img
+              src={Search}
+              alt="Search"
+              className="placementOffProfileSearchIcon"
+            />
 
-          <img
-            src={Search}
-            alt="Search"
-          />
+            <input
+              type="text"
+              placeholder="Search companies, drives..."
+              className="placementOffProfileSearchInput"
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="Search companies, drives..."
-          />
+          <div className="placementOffProfileHeaderRight">
 
-        </div>
+          
 
-        <div className="placement-header-right">
-
-
-          <div
-            className="placement-header-action"
-            ref={notificationRef}
-          >
-
-            <button
-              type="button"
-              className={`placement-header-icon ${
-                showNotifications
-                  ? "active"
-                  : ""
-              }`}
-              onClick={
-                handleNotificationClick
-              }
-              aria-label="Notifications"
+            <div
+              className="placementOffProfileIconButton"
+              ref={notificationsRef}
             >
-
               <img
                 src={Notification}
                 alt="Notifications"
+                className="placementOffProfileHeaderIcon"
+                onClick={handleToggleNotifications}
               />
 
-            </button>
+              {notifications.length > 0 && (
+                <span className="placementOffProfileBadge">
+                  {notifications.length}
+                </span>
+              )}
 
-            {showNotifications && (
-              <div className="placement-dropdown placement-notification-dropdown">
-
-                <div className="placement-dropdown-header">
-
-                  <div>
-
-                    <h4>
-                      Notifications
-                    </h4>
-
-                    <span>
-                      5 new notifications
-                    </span>
-
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShowNotifications(
-                        false
-                      )
-                    }
-                  >
-                    ×
-                  </button>
-
-                </div>
-
-                <div className="placement-dropdown-list">
-
+              {isNotificationsOpen && (
+                <div className="placementOffProfileDropdownPanel">
                   {notifications.map(
                     (notification) => (
                       <div
-                        className="placement-notification-item"
-                        key={
-                          notification.id
-                        }
+                        key={notification.id}
+                        className="placementOffProfileDropdownItem"
                       >
-
-                        <div className="placement-notification-dot">
-                          !
-                        </div>
-
-                        <div className="placement-dropdown-content">
-
-                          <strong>
-                            {
-                              notification.title
-                            }
-                          </strong>
-
-                          <p>
-                            {
-                              notification.text
-                            }
-                          </p>
-
-                          <small>
-                            {
-                              notification.time
-                            }
-                          </small>
-
-                        </div>
-
+                        {notification.text}
                       </div>
                     )
                   )}
-
                 </div>
+              )}
+            </div>
 
-                <button
-                  type="button"
-                  className="placement-dropdown-footer"
-                  onClick={() =>
-                    setShowNotifications(
-                      false
-                    )
-                  }
-                >
-                  View all notifications
-                </button>
+          
 
-              </div>
-            )}
-
-          </div>
-
-          <div
-            className="placement-header-action"
-            ref={messageRef}
-          >
-
-            <button
-              type="button"
-              className={`placement-header-icon ${
-                showMessages
-                  ? "active"
-                  : ""
-              }`}
-              onClick={
-                handleMessageClick
-              }
-              aria-label="Messages"
+            <div
+              className="placementOffProfileIconButton"
+              ref={messagesRef}
             >
-
               <img
                 src={Message}
                 alt="Messages"
+                className="placementOffProfileHeaderIcon"
+                onClick={handleToggleMessages}
               />
 
-            </button>
+              {messages.length > 0 && (
+                <span className="placementOffProfileBadge">
+                  {messages.length}
+                </span>
+              )}
 
-            {showMessages && (
-              <div className="placement-dropdown placement-message-dropdown">
-
-                <div className="placement-dropdown-header">
-
-                  <div>
-
-                    <h4>
-                      Messages
-                    </h4>
-
-                    <span>
-                      3 unread messages
-                    </span>
-
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShowMessages(
-                        false
-                      )
-                    }
-                  >
-                    ×
-                  </button>
-
+              {isMessagesOpen && (
+                <div className="placementOffProfileDropdownPanel">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className="placementOffProfileDropdownItem"
+                    >
+                      {message.text}
+                    </div>
+                  ))}
                 </div>
+              )}
+            </div>
 
-                <div className="placement-dropdown-list">
+           
 
-                  {messages.map(
-                    (message) => (
-                      <div
-                        className="placement-message-item"
-                        key={message.id}
-                      >
+            <div className="placementOffProfileUser">
 
-                        <div className="placement-message-avatar">
-                          {message.name
-                            .charAt(0)
-                            .toUpperCase()}
-                        </div>
+              {displayedProfileImage ? (
+                <img
+                  src={displayedProfileImage}
+                  alt="Priyanka"
+                  className="placementOffProfileUserImage"
+                />
+              ) : (
+                <div
+                  className="placementOffProfileUserImage placementOffProfilePhotoPlaceholder"
+                  role="img"
+                  aria-label="No profile photo"
+                >
+                  👤
+                </div>
+              )}
 
-                        <div className="placement-dropdown-content">
+              <div className="placementOffProfileUserInfo">
+                <span className="placementOffProfileUserName">
+                  Priyanka
+                </span>
 
-                          <strong>
-                            {message.name}
-                          </strong>
+                <span className="placementOffProfileUserRole">
+                  Placement Officer
+                </span>
+              </div>
 
-                          <p>
-                            {message.text}
-                          </p>
+            </div>
 
-                          <small>
-                            {message.time}
-                          </small>
+          </div>
+        </header>
 
-                        </div>
+        <div className="placementOffProfileTitleSection">
 
-                      </div>
-                    )
+          <h1 className="placementOffProfileTitle">
+            My Profile
+          </h1>
+
+          <p className="placementOffProfileSubtitle">
+            Manage your personal information,
+            preferences &amp; view your
+            performance.
+          </p>
+
+        </div>
+
+
+        <div className="placementOffProfileGrid">
+
+
+          <div className="placementOffProfileLeftColumn">
+
+           
+
+            <div className="placementOffProfileProfileCardWrapper">
+
+              <div className="placementOffProfileProfileCard">
+
+                <img
+                  src={Profile2}
+                  alt=""
+                  className="placementOffProfileProfileCardImage"
+                />
+
+                <div className="placementOffProfilePhotoWrapper">
+
+                  {displayedProfileImage ? (
+                    <img
+                      src={displayedProfileImage}
+                      alt="Priyanka - Placement Officer"
+                      className="placementOffProfilePhotoCircle"
+                    />
+                  ) : (
+                    <div
+                      className="placementOffProfilePhotoCircle placementOffProfilePhotoPlaceholder"
+                      role="img"
+                      aria-label="No profile photo"
+                    >
+                      👤
+                    </div>
+                  )}
+
+                  {isEditing && (
+                    <label
+                      className="placementOffProfilePhotoEditOverlay"
+                      htmlFor="placementOffProfilePhotoInput"
+                      title="Change photo"
+                    >
+                      <img
+                        src={Editprofile}
+                        alt="Change photo"
+                        className="placementOffProfilePhotoEditIcon"
+                      />
+
+                      <input
+                        id="placementOffProfilePhotoInput"
+                        type="file"
+                        accept="image/jpeg,image/png"
+                        onChange={
+                          handleProfilePictureChange
+                        }
+                        className="placementOffProfilePhotoEditInput"
+                      />
+                    </label>
                   )}
 
                 </div>
 
+                <h2 className="placementOffProfileProfileCardName">
+                  {savedFormData.name}
+                </h2>
+
+                <p className="placementOffProfileProfileCardRole">
+                  {savedFormData.designation}
+                </p>
+
+              </div>
+
+              {!isEditing && (
                 <button
                   type="button"
-                  className="placement-dropdown-footer"
-                  onClick={() =>
-                    setShowMessages(
-                      false
-                    )
-                  }
+                  className="placementOffProfileEditButton"
+                  onClick={handleEditClick}
                 >
-                  View all messages
-                </button>
-
-              </div>
-            )}
-
-          </div>
-
-          <div className="placement-header-profile">
-
-            <img
-              src={Profile1}
-              alt="Priyanka"
-            />
-
-            <div className="placement-header-profile-info">
-
-              <h4>
-                Priyanka
-              </h4>
-
-              <p>
-                Placement Officer
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </header>
-
-
-      <div className="placement-page-title">
-
-        <h1>
-          My Profile
-        </h1>
-
-        <p>
-          Manage your personal information,
-          preferences &amp; view your
-          performance.
-        </p>
-
-      </div>
-
-
-      {successMessage && (
-        <div className="placement-success-message">
-          {successMessage}
-        </div>
-      )}
-
-      {errorMessage && (
-        <div className="placement-error-message">
-          {errorMessage}
-        </div>
-      )}
-
-      <div className="placement-profile-content">
-
-        <aside className="placement-left-column">
-
-          <div className="placement-profile-card">
-
-            <div className="placement-profile-gradient"></div>
-
-            <div className="placement-profile-image-wrapper">
-
-              <img
-                src={
-                  profilePicture ||
-                  Profile2
-                }
-                alt="Priyanka"
-                className="placement-profile-image"
-              />
-
-              {isEditing && (
-                <label
-                  className="placementOffProfilePhotoEditOverlay"
-                  htmlFor="placementOffProfilePhotoInput"
-                  title="Change photo"
-                >
-
                   <img
                     src={Editprofile}
-                    alt="Change photo"
-                    className="placementOffProfilePhotoEditIcon"
+                    alt="Edit Profile"
+                    className="placementOffProfileEditIcon"
                   />
 
-                  <input
-                    id="placementOffProfilePhotoInput"
-                    type="file"
-                    accept="image/jpeg,image/png,image/jpg"
-                    onChange={
-                      handleProfilePictureChange
-                    }
-                    className="placementOffProfilePhotoEditInput"
-                  />
-
-                </label>
+                  Edit Profile
+                </button>
               )}
 
+              {isEditing && (
+                <button
+                  type="button"
+                  className="placementOffProfileDeletePhotoButton"
+                  onClick={handleDeleteProfilePicture}
+                >
+                  Delete Photo
+                </button>
+              )}
+
+              {isEditing &&
+                profilePictureError && (
+                  <span className="placementOffProfileDocumentError">
+                    {profilePictureError}
+                  </span>
+                )}
+
             </div>
 
-            <h2>
-              {savedFormData.name}
-            </h2>
 
-            <p>
-              {savedFormData.designation}
-            </p>
-
-          </div>
-
-          <button
-            type="button"
-            className="placement-edit-btn"
-            onClick={
-              handleEditClick
-            }
-          >
-
-            <img
-              src={Editprofile}
-              alt="Edit"
-            />
-
-            <span>
-              Edit Profile
-            </span>
-
-          </button>
-
-          {isEditing && (
-            <button
-              type="button"
-              className="placementOffProfileDeletePhotoButton"
-              onClick={
-                handleDeleteProfilePicture
-              }
+            <div
+              className={`placementOffProfileCard placementOffProfileProfessionalCard ${
+                isEditing
+                  ? "placementOffProfileEditingCard"
+                  : ""
+              }`}
             >
-              Delete Photo
-            </button>
-          )}
 
-          {isEditing &&
-            profilePictureError && (
-              <span className="placementOffProfileDocumentError">
-                {profilePictureError}
-              </span>
-            )}
+              <div className="placementOffProfileCardHeader">
 
-          <div className="placement-professional-card">
+                <img
+                  src={Professional}
+                  alt="Professional Information"
+                  className="placementOffProfileCardHeaderIcon"
+                />
 
-            <div className="placement-section-heading">
-
-              <img
-                src={Professional}
-                alt="Professional"
-              />
-
-              <h3>
-                Professional Information
-              </h3>
-
-            </div>
-
-            <div className="placement-professional-details">
-
-      
-
-              <div className="placement-detail-item">
-
-                <label>
-                  Employee Id
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="employeeId"
-                      value={
-                        formData.employeeId
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.employeeId
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.employeeId && (
-                      <span className="error-text">
-                        {
-                          errors.employeeId
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {
-                      formData.employeeId
-                    }
-                  </span>
-                )}
-
-              </div>
-              <div className="placement-detail-item">
-
-                <label>
-                  Joined On
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="joinedOn"
-                      value={
-                        formData.joinedOn
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.joinedOn
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.joinedOn && (
-                      <span className="error-text">
-                        {
-                          errors.joinedOn
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {
-                      formData.joinedOn
-                    }
-                  </span>
-                )}
+                <h3 className="placementOffProfileCardTitle">
+                  Professional Information
+                </h3>
 
               </div>
 
-
-              <div className="placement-detail-item">
-
-                <label>
-                  Designation
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="designation"
-                      value={
-                        formData.designation
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.designation
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.designation && (
-                      <span className="error-text">
-                        {
-                          errors.designation
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {
-                      formData.designation
-                    }
-                  </span>
-                )}
-
-              </div>
-
-             
-
-              <div className="placement-detail-item">
-
-                <label>
-                  Experience
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="experience"
-                      value={
-                        formData.experience
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.experience
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.experience && (
-                      <span className="error-text">
-                        {
-                          errors.experience
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {
-                      formData.experience
-                    }
-                  </span>
-                )}
-
-              </div>
-
-              <div className="placement-detail-item">
-
-                <label>
-                  Institute Address
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="professionalAddress"
-                      value={
-                        formData.professionalAddress
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.professionalAddress
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.professionalAddress && (
-                      <span className="error-text">
-                        {
-                          errors.professionalAddress
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {
-                      formData.professionalAddress
-                    }
-                  </span>
-                )}
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </aside>
-
-        <main className="placement-right-column">
-
-
-          <section className="placement-info-card">
-
-            <div className="placement-section-heading">
-
-              <img
-                src={Personal}
-                alt="Personal"
-              />
-
-              <h3>
-                Personal Information
-              </h3>
-
-            </div>
-
-            <div className="placement-personal-grid">
-
-              <div className="placement-info-item">
-
-                <label>
-                  Name
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="name"
-                      value={
-                        formData.name
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.name
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.name && (
-                      <span className="error-text">
-                        {errors.name}
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {formData.name}
-                  </span>
-                )}
-
-              </div>
+              <div className="placementOffProfileFieldStack">
 
               
 
-              <div className="placement-info-item">
+                <div className="placementOffProfileField">
 
-                <label>
-                  Date of birth
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="date"
-                      name="dateOfBirth"
-                      value={
-                        formData.dateOfBirth
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.dateOfBirth
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.dateOfBirth && (
-                      <span className="error-text">
-                        {
-                          errors.dateOfBirth
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {formatDate(
-                      formData.dateOfBirth
-                    )}
+                  <span className="placementOffProfileFieldLabel">
+                    Employee Id
                   </span>
-                )}
 
-              </div>
-
-              <div className="placement-info-item">
-
-                <label>
-                  Email
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="email"
-                      name="email"
-                      value={
-                        formData.email
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.email
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.email && (
-                      <span className="error-text">
-                        {errors.email}
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {formData.email}
-                  </span>
-                )}
-
-              </div>
-
-              <div className="placement-info-item">
-
-                <label>
-                  Gender
-                </label>
-
-                {isEditing ? (
-                  <select
-                    name="gender"
-                    value={
-                      formData.gender
-                    }
-                    onChange={
-                      handleInputChange
-                    }
-                  >
-
-                    <option value="Female">
-                      Female
-                    </option>
-
-                    <option value="Male">
-                      Male
-                    </option>
-
-                    <option value="Other">
-                      Other
-                    </option>
-
-                  </select>
-                ) : (
-                  <span>
-                    {formData.gender}
-                  </span>
-                )}
-
-              </div>
-
-
-              <div className="placement-info-item">
-
-                <label>
-                  Phone no
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <div className="placement-phone-input-wrapper">
-
-                      <select
-                        value={
-                          phoneCountryCode
-                        }
-                        onChange={(e) =>
-                          setPhoneCountryCode(
-                            e.target.value
-                          )
-                        }
-                        className="placement-country-code-select"
-                      >
-
-                        {COUNTRY_CODES.map(
-                          (country) => (
-                            <option
-                              key={
-                                country.code
-                              }
-                              value={
-                                country.code
-                              }
-                            >
-                              {country.flag}{" "}
-                              {
-                                country.code
-                              }
-                            </option>
-                          )
-                        )}
-
-                      </select>
-
+                  {isEditing ? (
+                    <>
                       <input
-                        type="tel"
-                        name="phone"
-                        value={
-                          formData.phone
-                        }
-                        onChange={
-                          handleInputChange
-                        }
-                        placeholder="Enter phone number"
-                        className={
-                          errors.phone
-                            ? "input-error placement-phone-number-input"
-                            : "placement-phone-number-input"
-                        }
+                        type="text"
+                        name="employeeId"
+                        value={formData.employeeId}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
                       />
 
-                    </div>
+                      {errors.employeeId && (
+                        <span className="placementOffProfileError">
+                          {errors.employeeId}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.employeeId}
+                    </span>
+                  )}
 
-                    {errors.phone && (
-                      <span className="error-text">
-                        {errors.phone}
-                      </span>
-                    )}
+                </div>
 
-                  </>
-                ) : (
-                  <span>
-                    {
-                      phoneCountryCode
-                    }{" "}
-                    {
-                      formData.phone
-                    }
+               
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Joined On
                   </span>
-                )}
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="joinedOn"
+                        value={formData.joinedOn}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.joinedOn && (
+                        <span className="placementOffProfileError">
+                          {errors.joinedOn}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.joinedOn}
+                    </span>
+                  )}
+
+                </div>
+
+               
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Designation
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="designation"
+                        value={formData.designation}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.designation && (
+                        <span className="placementOffProfileError">
+                          {errors.designation}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.designation}
+                    </span>
+                  )}
+
+                </div>
+
+                
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Experience
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="experience"
+                        value={formData.experience}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.experience && (
+                        <span className="placementOffProfileError">
+                          {errors.experience}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.experience}
+                    </span>
+                  )}
+
+                </div>
+
+               
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Institute Address
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="professionalAddress"
+                        value={
+                          formData.professionalAddress
+                        }
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.professionalAddress && (
+                        <span className="placementOffProfileError">
+                          {errors.professionalAddress}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.professionalAddress}
+                    </span>
+                  )}
+
+                </div>
 
               </div>
+            </div>
+
+          </div>
+
+
+          <div className="placementOffProfileRightColumn">
+
+
+            <div
+              className={`placementOffProfileCard placementOffProfilePersonalCard ${
+                isEditing
+                  ? "placementOffProfileEditingCard"
+                  : ""
+              }`}
+            >
+
+              <div className="placementOffProfileCardHeader">
+
+                <img
+                  src={Personal}
+                  alt="Personal Information"
+                  className="placementOffProfileCardHeaderIcon"
+                />
+
+                <h3 className="placementOffProfileCardTitle">
+                  Personal Information
+                </h3>
+
+              </div>
+
+              <div className="placementOffProfileFieldGrid placementOffProfileFieldGridThree">
 
              
 
-              <div className="placement-info-item full-width">
+                <div className="placementOffProfileField">
 
-                <label>
-                  Address
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <textarea
-                      name="address"
-                      value={
-                        formData.address
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.address
-                          ? "input-error"
-                          : ""
-                      }
-                      rows="3"
-                    />
-
-                    {errors.address && (
-                      <span className="error-text">
-                        {
-                          errors.address
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {formData.address}
+                  <span className="placementOffProfileFieldLabel">
+                    Name
                   </span>
-                )}
 
-              </div>
-
-            </div>
-
-          </section>
-
-          <section className="placement-info-card institute-card">
-
-            <div className="placement-section-heading">
-
-              <img
-                src={Institute}
-                alt="Institute"
-              />
-
-              <h3>
-                Institute Details
-              </h3>
-
-            </div>
-
-            <div className="placement-institute-grid">
-
-            
-
-              <div className="placement-info-item">
-
-                <label>
-                  College/University
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="college"
-                      value={
-                        formData.college
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.college
-                          ? "input-error"
-                          : ""
-                      }
-                    />
-
-                    {errors.college && (
-                      <span className="error-text">
-                        {
-                          errors.college
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {formData.college}
-                  </span>
-                )}
-
-              </div>
-
-              <div className="placement-info-item empty-grid-item">
-
-                <label></label>
-
-                <span></span>
-
-              </div>
-
-            
-
-              <div className="placement-info-item">
-
-                <label>
-                  Affiliated University
-                </label>
-
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="university"
-                    value={
-                      formData.university
-                    }
-                    onChange={
-                      handleInputChange
-                    }
-                  />
-                ) : (
-                  <span>
-                    {
-                      formData.university
-                    }
-                  </span>
-                )}
-
-              </div>
-
-            
-
-              <div className="placement-info-item">
-
-                <label>
-                  Institution Website
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="website"
-                      value={
-                        formData.website
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.website
-                          ? "input-error"
-                          : ""
-                      }
-                      placeholder="e.g. www.example.com"
-                    />
-
-                    {errors.website && (
-                      <span className="error-text">
-                        {
-                          errors.website
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {formData.website}
-                  </span>
-                )}
-
-              </div>
-
-              <div className="placement-info-item">
-
-                <label>
-                  Phone no
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <div className="placement-phone-input-wrapper">
-
-                      <select
-                        value={
-                          instituteCountryCode
-                        }
-                        onChange={(e) =>
-                          setInstituteCountryCode(
-                            e.target.value
-                          )
-                        }
-                        className="placement-country-code-select"
-                      >
-
-                        {COUNTRY_CODES.map(
-                          (country) => (
-                            <option
-                              key={
-                                country.code
-                              }
-                              value={
-                                country.code
-                              }
-                            >
-                              {country.flag}{" "}
-                              {
-                                country.code
-                              }
-                            </option>
-                          )
-                        )}
-
-                      </select>
-
+                  {isEditing ? (
+                    <>
                       <input
-                        type="tel"
-                        name="institutePhone"
-                        value={
-                          formData.institutePhone
-                        }
-                        onChange={
-                          handleInputChange
-                        }
-                        placeholder="Enter institute phone number"
-                        className={
-                          errors.institutePhone
-                            ? "input-error placement-phone-number-input"
-                            : "placement-phone-number-input"
-                        }
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
                       />
 
-                    </div>
+                      {errors.name && (
+                        <span className="placementOffProfileError">
+                          {errors.name}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.name}
+                    </span>
+                  )}
 
-                    {errors.institutePhone && (
-                      <span className="error-text">
-                        {
-                          errors.institutePhone
-                        }
-                      </span>
-                    )}
-
-                  </>
-                ) : (
-                  <span>
-                    {
-                      instituteCountryCode
-                    }{" "}
-                    {
-                      formData.institutePhone
-                    }
-                  </span>
-                )}
-
-              </div>
-
-              <div className="placement-info-item">
-
-                <label>
-                  Institution Address
-                </label>
-
-                {isEditing ? (
-                  <>
-                    <textarea
-                      name="instituteAddress"
-                      value={
-                        formData.instituteAddress
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      className={
-                        errors.instituteAddress
-                          ? "input-error"
-                          : ""
-                      }
-                      rows="3"
-                    />
-
-                    {errors.instituteAddress && (
-                      <span className="error-text">
-                        {
-                          errors.instituteAddress
-                        }
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span>
-                    {
-                      formData.instituteAddress
-                    }
-                  </span>
-                )}
-
-              </div>
-
-            </div>
-
-          </section>
-
-          <section className="placement-documents-card">
-
-            <div className="placement-section-heading">
-
-              <img
-                src={Document}
-                alt="Documents"
-              />
-
-              <h3>
-                Documents
-              </h3>
-
-            </div>
-
-            <div className="placement-document-list">
-
-              {documents.length === 0 ? (
-                <div className="placement-no-documents">
-                  No documents available.
                 </div>
-              ) : (
-                documents.map(
-                  (doc) => (
-                    <div
-                      className="placement-document-item"
-                      key={doc.id}
-                    >
 
-                      <div className="placement-document-name">
+               
 
-                        <img
-                          src={doc.icon}
-                          alt={doc.name}
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Date of birth
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="dateOfBirth"
+                        value={formData.dateOfBirth}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                        placeholder="October 14, 1988"
+                      />
+
+                      {errors.dateOfBirth && (
+                        <span className="placementOffProfileError">
+                          {errors.dateOfBirth}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.dateOfBirth}
+                    </span>
+                  )}
+
+                </div>
+
+              
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Email
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.email && (
+                        <span className="placementOffProfileError">
+                          {errors.email}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.email}
+                    </span>
+                  )}
+
+                </div>
+
+              </div>
+
+              <div className="placementOffProfileFieldGrid placementOffProfileFieldGridThree">
+
+            
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Gender
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        className="placementOffProfileSelect"
+                      >
+                        <option value="">
+                          Select gender
+                        </option>
+
+                        <option value="Female">
+                          Female
+                        </option>
+
+                        <option value="Male">
+                          Male
+                        </option>
+
+                        <option value="Other">
+                          Other
+                        </option>
+                      </select>
+
+                      {errors.gender && (
+                        <span className="placementOffProfileError">
+                          {errors.gender}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.gender}
+                    </span>
+                  )}
+
+                </div>
+
+            
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Phone no
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <div className="placementOffProfilePhoneRow">
+
+                        <select
+                          name="phoneCountryCode"
+                          value={
+                            formData.phoneCountryCode
+                          }
+                          onChange={handleChange}
+                          className="placementOffProfileSelect placementOffProfileCountryCodeSelect"
+                        >
+                          {COUNTRY_CODES.map(
+                            (country) => (
+                              <option
+                                key={country.code}
+                                value={country.code}
+                              >
+                                {country.flag}{" "}
+                                {country.code}
+                              </option>
+                            )
+                          )}
+                        </select>
+
+                        <input
+                          type="text"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="placementOffProfileInput"
                         />
 
-                        <span>
-                          {doc.name}
+                      </div>
+
+                      {errors.phone && (
+                        <span className="placementOffProfileError">
+                          {errors.phone}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.phoneCountryCode}{" "}
+                      {formData.phone}
+                    </span>
+                  )}
+
+                </div>
+
+              </div>
+
+           
+
+              <div className="placementOffProfileFieldGrid placementOffProfileFieldGridOne">
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Address
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.address && (
+                        <span className="placementOffProfileError">
+                          {errors.address}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.address}
+                    </span>
+                  )}
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div
+              className={`placementOffProfileCard placementOffProfileInstituteCard ${
+                isEditing
+                  ? "placementOffProfileEditingCard"
+                  : ""
+              }`}
+            >
+
+              <div className="placementOffProfileCardHeader">
+
+                <img
+                  src={Institute}
+                  alt="Institute Details"
+                  className="placementOffProfileCardHeaderIcon"
+                />
+
+                <h3 className="placementOffProfileCardTitle">
+                  Institute Details
+                </h3>
+
+              </div>
+
+            
+
+              <div className="placementOffProfileFieldGrid placementOffProfileFieldGridOne">
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    College/University
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="college"
+                        value={formData.college}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.college && (
+                        <span className="placementOffProfileError">
+                          {errors.college}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.college}
+                    </span>
+                  )}
+
+                </div>
+
+              </div>
+
+            
+
+              <div className="placementOffProfileFieldGrid placementOffProfileFieldGridTwo">
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Affiliated University
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="affiliatedUniversity"
+                        value={
+                          formData.affiliatedUniversity
+                        }
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.affiliatedUniversity && (
+                        <span className="placementOffProfileError">
+                          {
+                            errors.affiliatedUniversity
+                          }
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {
+                        formData.affiliatedUniversity
+                      }
+                    </span>
+                  )}
+
+                </div>
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Institution Website
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="website"
+                        value={formData.website}
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.website && (
+                        <span className="placementOffProfileError">
+                          {errors.website}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {formData.website}
+                    </span>
+                  )}
+
+                </div>
+
+              </div>
+
+            
+
+              <div className="placementOffProfileFieldGrid placementOffProfileFieldGridTwo">
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Phone no
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <div className="placementOffProfilePhoneRow">
+
+                        <select
+                          name="institutionPhoneCountryCode"
+                          value={
+                            formData.institutionPhoneCountryCode
+                          }
+                          onChange={handleChange}
+                          className="placementOffProfileSelect placementOffProfileCountryCodeSelect"
+                        >
+                          {COUNTRY_CODES.map(
+                            (country) => (
+                              <option
+                                key={country.code}
+                                value={country.code}
+                              >
+                                {country.flag}{" "}
+                                {country.code}
+                              </option>
+                            )
+                          )}
+                        </select>
+
+                        <input
+                          type="text"
+                          name="institutionPhone"
+                          value={
+                            formData.institutionPhone
+                          }
+                          onChange={handleChange}
+                          className="placementOffProfileInput"
+                        />
+
+                      </div>
+
+                      {errors.institutionPhone && (
+                        <span className="placementOffProfileError">
+                          {
+                            errors.institutionPhone
+                          }
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {
+                        formData.institutionPhoneCountryCode
+                      }{" "}
+                      {formData.institutionPhone}
+                    </span>
+                  )}
+
+                </div>
+
+                <div className="placementOffProfileField">
+
+                  <span className="placementOffProfileFieldLabel">
+                    Institution Address
+                  </span>
+
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        name="institutionAddress"
+                        value={
+                          formData.institutionAddress
+                        }
+                        onChange={handleChange}
+                        className="placementOffProfileInput"
+                      />
+
+                      {errors.institutionAddress && (
+                        <span className="placementOffProfileError">
+                          {
+                            errors.institutionAddress
+                          }
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="placementOffProfileFieldValue">
+                      {
+                        formData.institutionAddress
+                      }
+                    </span>
+                  )}
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div className="placementOffProfileCard placementOffProfileDocumentsCard">
+
+              <div className="placementOffProfileCardHeader">
+
+                <img
+                  src={Document}
+                  alt="Documents"
+                  className="placementOffProfileCardHeaderIcon"
+                />
+
+                <h3 className="placementOffProfileCardTitle">
+                  Documents
+                </h3>
+
+              </div>
+
+              <div className="placementOffProfileDocumentList">
+
+                {documents.length > 0 &&
+                  documents.map((document) => (
+                    <div
+                      className="placementOffProfileDocumentItem"
+                      key={document.id}
+                    >
+
+                      <div className="placementOffProfileDocumentInfo">
+
+                        <img
+                          src={Employee}
+                          alt="Document"
+                          className="placementOffProfileDocumentIcon"
+                        />
+
+                        <span className="placementOffProfileDocumentName">
+                          {document.name}
                         </span>
 
                       </div>
 
-                      <div className="placement-document-actions">
+                      <div className="placementOffProfileDocumentActions">
 
                         <button
                           type="button"
-                          className="placement-view-btn"
+                          className="placementOffProfileViewButton"
                           onClick={() =>
                             handleViewDocument(
-                              doc
+                              document
                             )
                           }
                         >
@@ -2000,10 +1588,10 @@ const PlacementProfile = () => {
                         {isEditing && (
                           <button
                             type="button"
-                            className="placement-delete-btn"
+                            className="placementOffProfileDeleteButton"
                             onClick={() =>
                               handleDeleteDocument(
-                                doc.id
+                                document.id
                               )
                             }
                           >
@@ -2014,69 +1602,59 @@ const PlacementProfile = () => {
                       </div>
 
                     </div>
-                  )
-                )
+                  ))}
+
+              </div>
+
+            
+
+              {isEditing && (
+                <div className="placementOffProfileAddDocument">
+
+                  <label
+                    htmlFor="placementOffProfileDocumentInput"
+                    className="placementOffProfileFieldLabel"
+                  >
+                    + Add Document
+                  </label>
+
+                  <input
+                    id="placementOffProfileDocumentInput"
+                    type="file"
+                    accept="application/pdf,image/jpeg,image/png"
+                    onChange={handleAddDocument}
+                    className="placementOffProfileDocumentFileInput"
+                  />
+
+                  {documentError && (
+                    <span className="placementOffProfileDocumentError">
+                      {documentError}
+                    </span>
+                  )}
+
+                </div>
               )}
 
             </div>
 
-            {isEditing && (
-              <div className="placement-add-document">
+          </div>
+        </div>
 
-                <div className="placement-add-document-title">
-                  + Add Document
-                </div>
-
-                <div className="placement-file-upload">
-
-                  <input
-                    type="file"
-                    id="document-upload"
-                    className="placement-file-input"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={
-                      handleAddDocument
-                    }
-                  />
-
-                </div>
-
-                {documentError && (
-                  <span className="error-text">
-                    {documentError}
-                  </span>
-                )}
-
-                <small className="placement-file-help">
-                  PDF, JPG, JPEG or PNG.
-                  Maximum 5 MB.
-                </small>
-
-              </div>
-            )}
-
-          </section>
-
-        </main>
         {isEditing && (
-          <div className="placement-profile-actions">
+          <div className="placementOffProfileActions">
 
             <button
               type="button"
-              className="placement-cancel-btn"
-              onClick={
-                handleCancel
-              }
+              className="placementOffProfileCancelButton"
+              onClick={handleCancel}
             >
               Cancel
             </button>
 
             <button
               type="button"
-              className="placement-save-btn"
-              onClick={
-                handleSaveChanges
-              }
+              className="placementOffProfileSaveButton"
+              onClick={handleSave}
             >
               Save Changes
             </button>
@@ -2085,9 +1663,8 @@ const PlacementProfile = () => {
         )}
 
       </div>
-
-    </div>
+    </main>
   );
 };
 
-export default PlacementProfile;
+export default PlacementOffProfile;
