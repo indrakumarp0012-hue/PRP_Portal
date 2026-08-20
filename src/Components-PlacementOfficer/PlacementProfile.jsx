@@ -11,18 +11,19 @@ import Personal from "../assets/PlacementProfileAssets/Personal.png";
 import Institute from "../assets/PlacementProfileAssets/Institute.png";
 import Document from "../assets/PlacementProfileAssets/Document.png";
 import Employee from "../assets/PlacementProfileAssets/Employee.png";
-
+import { useData } from "../DataProvider";
 
 const COUNTRY_CODES = [
-  {code: "+91",flag: "🇮🇳", label: "India",},
+  {code: "+91",flag: "🇮🇳",label: "India",},
   {code: "+1",flag: "🇺🇸",label: "USA/Canada",},
-  {code: "+44",flag: "🇬🇧",label: "UK", },
+  {code: "+44",flag: "🇬🇧",label: "UK",},
   {code: "+61",flag: "🇦🇺",label: "Australia",},
   {code: "+971",flag: "🇦🇪",label: "UAE",},
   {code: "+65",flag: "🇸🇬",label: "Singapore",},
   {code: "+49",flag: "🇩🇪",label: "Germany",},
-  { code: "+81", flag: "🇯🇵",label: "Japan", },
+  {code: "+81",flag: "🇯🇵",label: "Japan",},
 ];
+
 
 const initialFormData = {
   name: "Priyanka J",
@@ -32,6 +33,7 @@ const initialFormData = {
 
   phoneCountryCode: "+1",
   phone: "(555) 012-3456",
+
   address: "745 ECR road, Chennai - 100010",
 
   college: "Govt. Eng. College, CBE",
@@ -46,68 +48,81 @@ const initialFormData = {
   joinedOn: "Apr 15, 2024",
   designation: "Placement Officer",
   experience: "6+ years",
+
   professionalAddress: "745 OMR road, Chennai - 105215",
 };
 
+const EMAIL_REGEX =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX =
+  /^\+?[\d\s()-]{7,20}$/;
 
-const PHONE_REGEX = /^\+?[\d\s()-]{7,20}$/;
-const WEBSITE_REGEX = /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
-const ALLOWED_DOCUMENT_TYPES = [ "application/pdf", "image/jpeg", "image/png",];
-const ALLOWED_IMAGE_TYPES = ["image/jpeg","image/png",];
+const WEBSITE_REGEX =
+  /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+
+const ALLOWED_DOCUMENT_TYPES = [
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+];
+
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+];
+
 
 const initialDocuments = [
   {id: 1,name: "Employee ID Card",fileName: "Employee_ID_Card.pdf",},
-  {id: 2,name: "Appointment Letter",fileName: "Appointment_Letter.pdf", },
+  {id: 2,name: "Appointment Letter",fileName: "Appointment_Letter.pdf",},
   {id: 3,name: "Certificates",fileName: "Certificates.pdf",},
 ];
-
 
 const initialNotifications = [
   {id: 1,text: "New placement drive scheduled for Aug 20.",},
   {id: 2,text: "3 students updated their resumes.",},
 ];
 
-
 const initialMessages = [
-  {id: 1,text: "HR Manager: Please confirm interview slots.",},
+  {
+    id: 1,
+    text: "HR Manager: Please confirm interview slots.",
+  },
 ];
 
+const PlacementOffProfile = ({ currentUser }) => {
+  const { setUser } = useData();
 
-const PlacementOffProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => ({
     ...initialFormData,
-  });
-
-  const [savedFormData, setSavedFormData] = useState({
-    ...initialFormData,
-  });
+    ...(currentUser || {}),
+  }));
 
   const [errors, setErrors] = useState({});
 
+  const [documents, setDocuments] =
+    useState(initialDocuments);
 
-  const [documents, setDocuments] = useState([
-    ...initialDocuments,
-  ]);
-
-  const [savedDocuments, setSavedDocuments] = useState([
-    ...initialDocuments,
-  ]);
-
-  const [documentError, setDocumentError] = useState("");
-
+  const [documentError, setDocumentError] =
+    useState("");
 
   const [profilePicture, setProfilePicture] =
-    useState(ProfileImage);
+    useState(() =>
+      currentUser?.profilePicture
+        ? currentUser.profilePicture
+        : ProfileImage
+    );
 
   const [
     isProfilePictureDeleted,
     setIsProfilePictureDeleted,
-  ] = useState(false);
+  ] = useState(() =>
+    Boolean(currentUser?.isProfilePictureDeleted)
+  );
 
   const [previewPicture, setPreviewPicture] =
     useState(null);
@@ -117,7 +132,6 @@ const PlacementOffProfile = () => {
 
   const [profilePictureError, setProfilePictureError] =
     useState("");
-
 
   const [notifications] = useState(
     initialNotifications
@@ -137,7 +151,30 @@ const PlacementOffProfile = () => {
 
   const notificationsRef = useRef(null);
   const messagesRef = useRef(null);
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
 
+    setFormData({
+      ...initialFormData,
+      ...currentUser,
+    });
+
+    setProfilePicture(
+      currentUser.profilePicture
+        ? currentUser.profilePicture
+        : ProfileImage
+    );
+
+    setIsProfilePictureDeleted(
+      Boolean(currentUser.isProfilePictureDeleted)
+    );
+
+    if (Array.isArray(currentUser.documents)) {
+      setDocuments(currentUser.documents);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -169,7 +206,6 @@ const PlacementOffProfile = () => {
     };
   }, []);
 
-
   const handleToggleNotifications = () => {
     setIsNotificationsOpen(
       (previous) => !previous
@@ -177,7 +213,6 @@ const PlacementOffProfile = () => {
 
     setIsMessagesOpen(false);
   };
-
 
   const handleToggleMessages = () => {
     setIsMessagesOpen(
@@ -187,9 +222,7 @@ const PlacementOffProfile = () => {
     setIsNotificationsOpen(false);
   };
 
-
   const committedProfileImage =
-
     isProfilePictureDeleted
       ? null
       : profilePicture;
@@ -225,17 +258,14 @@ const PlacementOffProfile = () => {
     });
   };
 
-
   const validateForm = () => {
     const newErrors = {};
 
    
-    if (!formData.name.trim()) {
+    if (!formData.name?.trim()) {
       newErrors.name = "Name is required.";
     }
-
-    
-    if (!formData.dateOfBirth.trim()) {
+    if (!formData.dateOfBirth?.trim()) {
       newErrors.dateOfBirth =
         "Date of birth is required.";
     } else if (
@@ -247,59 +277,55 @@ const PlacementOffProfile = () => {
         "Enter a valid date.";
     }
 
-    
-    if (!formData.email.trim()) {
+   
+    if (!formData.email?.trim()) {
       newErrors.email = "Email is required.";
     } else if (
-      !EMAIL_REGEX.test(
-        formData.email.trim()
-      )
+      !EMAIL_REGEX.test(formData.email.trim())
     ) {
       newErrors.email =
         "Enter a valid email address.";
     }
 
-   
-    if (!formData.gender.trim()) {
-      newErrors.gender = "Gender is required.";
+
+    if (!formData.gender?.trim()) {
+      newErrors.gender =
+        "Gender is required.";
     }
 
    
-    if (!formData.phone.trim()) {
+    if (!formData.phone?.trim()) {
       newErrors.phone =
         "Phone number is required.";
     } else if (
-      !PHONE_REGEX.test(
-        formData.phone.trim()
-      )
+      !PHONE_REGEX.test(formData.phone.trim())
     ) {
       newErrors.phone =
         "Enter a valid phone number.";
     }
 
     
-    if (!formData.address.trim()) {
+    if (!formData.address?.trim()) {
       newErrors.address =
         "Address is required.";
     }
 
-   
-    if (!formData.college.trim()) {
+    if (!formData.college?.trim()) {
       newErrors.college =
         "College/University is required.";
     }
 
     
     if (
-      !formData.affiliatedUniversity.trim()
+      !formData.affiliatedUniversity?.trim()
     ) {
       newErrors.affiliatedUniversity =
         "Affiliated University is required.";
     }
 
-    
+   
     if (
-      formData.website.trim() &&
+      formData.website?.trim() &&
       !WEBSITE_REGEX.test(
         formData.website.trim()
       )
@@ -309,7 +335,9 @@ const PlacementOffProfile = () => {
     }
 
    
-    if (!formData.institutionPhone.trim()) {
+    if (
+      !formData.institutionPhone?.trim()
+    ) {
       newErrors.institutionPhone =
         "Institution phone number is required.";
     } else if (
@@ -323,39 +351,37 @@ const PlacementOffProfile = () => {
 
    
     if (
-      !formData.institutionAddress.trim()
+      !formData.institutionAddress?.trim()
     ) {
       newErrors.institutionAddress =
         "Institution address is required.";
     }
 
-    
-    if (!formData.employeeId.trim()) {
+   
+    if (!formData.employeeId?.trim()) {
       newErrors.employeeId =
         "Employee ID is required.";
     }
 
-   
-    if (!formData.joinedOn.trim()) {
+    if (!formData.joinedOn?.trim()) {
       newErrors.joinedOn =
         "Joined On is required.";
     }
 
-    
-    if (!formData.designation.trim()) {
+    if (!formData.designation?.trim()) {
       newErrors.designation =
         "Designation is required.";
     }
 
     
-    if (!formData.experience.trim()) {
+    if (!formData.experience?.trim()) {
       newErrors.experience =
         "Experience is required.";
     }
 
-   
+    
     if (
-      !formData.professionalAddress.trim()
+      !formData.professionalAddress?.trim()
     ) {
       newErrors.professionalAddress =
         "Institute address is required.";
@@ -368,14 +394,18 @@ const PlacementOffProfile = () => {
 
 
   const handleEditClick = () => {
-    setIsEditing(true);
+    setFormData({
+      ...initialFormData,
+      ...(currentUser || {}),
+    });
 
     setErrors({});
     setDocumentError("");
     setProfilePictureError("");
-
     setPreviewPicture(null);
     setPreviewDeleted(false);
+
+    setIsEditing(true);
   };
 
 
@@ -386,6 +416,9 @@ const PlacementOffProfile = () => {
       return;
     }
 
+    const nextProfilePicture =
+      previewPicture || profilePicture;
+
     const nextIsProfilePictureDeleted =
       previewPicture
         ? false
@@ -393,53 +426,69 @@ const PlacementOffProfile = () => {
         ? true
         : isProfilePictureDeleted;
 
-    setSavedFormData({
-      ...formData,
-    });
-
-    setSavedDocuments([
-      ...documents,
-    ]);
-
-    if (previewPicture) {
-      setProfilePicture(previewPicture);
-    }
+    
+    setProfilePicture(
+      nextIsProfilePictureDeleted
+        ? ProfileImage
+        : nextProfilePicture
+    );
 
     setIsProfilePictureDeleted(
       nextIsProfilePictureDeleted
     );
 
+    
     setPreviewPicture(null);
     setPreviewDeleted(false);
-
     setProfilePictureError("");
     setDocumentError("");
     setErrors({});
-
     setIsEditing(false);
+
+
+    if (!currentUser?.id) {
+      return;
+    }
+
+    setUser((previousUser) => ({
+      ...previousUser,
+
+      PlacementOfficer:
+        previousUser?.PlacementOfficer?.map(
+          (placementOfficer) =>
+            placementOfficer.id === currentUser.id
+              ? {
+                  ...placementOfficer,
+                  ...formData,
+
+                  profilePicture:
+                    nextProfilePicture,
+
+                  isProfilePictureDeleted:
+                    nextIsProfilePictureDeleted,
+
+                  documents,
+                }
+              : placementOfficer
+        ) || [],
+    }));
   };
 
 
   const handleCancel = () => {
     setFormData({
-      ...savedFormData,
+      ...initialFormData,
+      ...(currentUser || {}),
     });
-
-    setDocuments([
-      ...savedDocuments,
-    ]);
 
     setErrors({});
     setDocumentError("");
-
+    setProfilePictureError("");
     setPreviewPicture(null);
     setPreviewDeleted(false);
 
-    setProfilePictureError("");
-
     setIsEditing(false);
   };
-
 
   const handleProfilePictureChange = (event) => {
     const file = event.target.files?.[0];
@@ -452,9 +501,7 @@ const PlacementOffProfile = () => {
     }
 
     if (
-      !ALLOWED_IMAGE_TYPES.includes(
-        file.type
-      )
+      !ALLOWED_IMAGE_TYPES.includes(file.type)
     ) {
       setProfilePictureError(
         "Only JPG and PNG images are allowed."
@@ -464,7 +511,7 @@ const PlacementOffProfile = () => {
       return;
     }
 
-   
+    
     if (file.size > 5 * 1024 * 1024) {
       setProfilePictureError(
         "Image size must be less than 5 MB."
@@ -477,10 +524,7 @@ const PlacementOffProfile = () => {
     const reader = new FileReader();
 
     reader.onload = () => {
-      setPreviewPicture(
-        reader.result
-      );
-
+      setPreviewPicture(reader.result);
       setPreviewDeleted(false);
       setProfilePictureError("");
     };
@@ -511,11 +555,13 @@ const PlacementOffProfile = () => {
         "_blank",
         "noopener,noreferrer"
       );
-    } else {
-      alert(
-        `${document.name} is available in the profile.`
-      );
+
+      return;
     }
+
+    alert(
+      `${document.fileName || document.name} is not available for preview.`
+    );
   };
 
 
@@ -528,12 +574,11 @@ const PlacementOffProfile = () => {
       return;
     }
 
-    setDocuments(
-      (previousDocuments) =>
-        previousDocuments.filter(
-          (document) =>
-            document.id !== documentId
-        )
+    setDocuments((previousDocuments) =>
+      previousDocuments.filter(
+        (document) =>
+          document.id !== documentId
+      )
     );
   };
 
@@ -561,44 +606,42 @@ const PlacementOffProfile = () => {
       return;
     }
 
-   
+    
     if (file.size > 5 * 1024 * 1024) {
       setDocumentError(
-        "File size must be less than 5 MB."
+        "Document size must be less than 5 MB."
       );
 
       event.target.value = "";
       return;
     }
 
+    const documentUrl =
+      URL.createObjectURL(file);
+
     const newDocument = {
       id: Date.now(),
       name: file.name,
       fileName: file.name,
-      url: URL.createObjectURL(file),
+      url: documentUrl,
     };
 
-    setDocuments(
-      (previousDocuments) => [
-        ...previousDocuments,
-        newDocument,
-      ]
-    );
+    setDocuments((previousDocuments) => [
+      ...previousDocuments,
+      newDocument,
+    ]);
 
     setDocumentError("");
 
     event.target.value = "";
   };
 
-
   return (
     <main className="placementOffProfileMain">
       <div className="placementOffProfileContent">
 
-
         <header className="placementOffProfileHeader">
 
-         
           <div className="placementOffProfileSearchBar">
             <img
               src={Search}
@@ -613,22 +656,26 @@ const PlacementOffProfile = () => {
             />
           </div>
 
-         
           <div className="placementOffProfileHeaderRight">
 
-            
             <div
               className="placementOffProfileIconButton"
               ref={notificationsRef}
             >
-              <img
-                src={Notification}
-                alt="Notifications"
-                className="placementOffProfileHeaderIcon"
+              <button
+                type="button"
+                className="placementOffProfileHeaderIconButton"
                 onClick={
                   handleToggleNotifications
                 }
-              />
+                aria-label="Notifications"
+              >
+                <img
+                  src={Notification}
+                  alt="Notifications"
+                  className="placementOffProfileHeaderIcon"
+                />
+              </button>
 
               {notifications.length > 0 && (
                 <span className="placementOffProfileBadge">
@@ -638,33 +685,42 @@ const PlacementOffProfile = () => {
 
               {isNotificationsOpen && (
                 <div className="placementOffProfileDropdownPanel">
-                  {notifications.map(
-                    (notification) => (
-                      <div
-                        key={notification.id}
-                        className="placementOffProfileDropdownItem"
-                      >
-                        {notification.text}
-                      </div>
+                  {notifications.length > 0 ? (
+                    notifications.map(
+                      (notification) => (
+                        <div
+                          key={notification.id}
+                          className="placementOffProfileDropdownItem"
+                        >
+                          {notification.text}
+                        </div>
+                      )
                     )
+                  ) : (
+                    <div className="placementOffProfileDropdownEmpty">
+                      No new notifications
+                    </div>
                   )}
                 </div>
               )}
             </div>
 
-          
             <div
               className="placementOffProfileIconButton"
               ref={messagesRef}
             >
-              <img
-                src={Message}
-                alt="Messages"
-                className="placementOffProfileHeaderIcon"
-                onClick={
-                  handleToggleMessages
-                }
-              />
+              <button
+                type="button"
+                className="placementOffProfileHeaderIconButton"
+                onClick={handleToggleMessages}
+                aria-label="Messages"
+              >
+                <img
+                  src={Message}
+                  alt="Messages"
+                  className="placementOffProfileHeaderIcon"
+                />
+              </button>
 
               {messages.length > 0 && (
                 <span className="placementOffProfileBadge">
@@ -674,23 +730,25 @@ const PlacementOffProfile = () => {
 
               {isMessagesOpen && (
                 <div className="placementOffProfileDropdownPanel">
-                  {messages.map(
-                    (message) => (
+                  {messages.length > 0 ? (
+                    messages.map((message) => (
                       <div
                         key={message.id}
                         className="placementOffProfileDropdownItem"
                       >
                         {message.text}
                       </div>
-                    )
+                    ))
+                  ) : (
+                    <div className="placementOffProfileDropdownEmpty">
+                      No new messages
+                    </div>
                   )}
                 </div>
               )}
             </div>
 
-            {/* User */}
             <div className="placementOffProfileUser">
-
               {displayedProfileImage ? (
                 <img
                   src={displayedProfileImage}
@@ -709,17 +767,22 @@ const PlacementOffProfile = () => {
 
               <div className="placementOffProfileUserInfo">
                 <span className="placementOffProfileUserName">
-                  Priyanka
+                  {currentUser?.name ||
+                    formData.name ||
+                    "Priyanka"}
                 </span>
 
                 <span className="placementOffProfileUserRole">
-                  Placement Officer
+                  {currentUser?.designation ||
+                    formData.designation ||
+                    "Placement Officer"}
                 </span>
               </div>
             </div>
 
           </div>
         </header>
+
 
         <div className="placementOffProfileTitleSection">
           <h1 className="placementOffProfileTitle">
@@ -736,7 +799,6 @@ const PlacementOffProfile = () => {
 
         <div className="placementOffProfileGrid">
 
-
           <div className="placementOffProfileLeftColumn">
 
             <div className="placementOffProfileProfileCardWrapper">
@@ -749,7 +811,6 @@ const PlacementOffProfile = () => {
                   className="placementOffProfileProfileCardImage"
                 />
 
-               
                 <div className="placementOffProfilePhotoWrapper">
 
                   {displayedProfileImage ? (
@@ -768,7 +829,6 @@ const PlacementOffProfile = () => {
                     </div>
                   )}
 
-                 
                   {isEditing && (
                     <label
                       className="placementOffProfilePhotoEditOverlay"
@@ -792,17 +852,15 @@ const PlacementOffProfile = () => {
                       />
                     </label>
                   )}
-
                 </div>
 
                 <h2 className="placementOffProfileProfileCardName">
-                  {savedFormData.name}
+                  {formData.name}
                 </h2>
 
                 <p className="placementOffProfileProfileCardRole">
-                  {savedFormData.designation}
+                  {formData.designation}
                 </p>
-
               </div>
 
               {!isEditing && (
@@ -821,7 +879,7 @@ const PlacementOffProfile = () => {
                 </button>
               )}
 
-              
+
               {isEditing && (
                 <button
                   type="button"
@@ -834,14 +892,12 @@ const PlacementOffProfile = () => {
                 </button>
               )}
 
-             
               {isEditing &&
                 profilePictureError && (
                   <span className="placementOffProfileDocumentError">
                     {profilePictureError}
                   </span>
                 )}
-
             </div>
 
 
@@ -852,7 +908,6 @@ const PlacementOffProfile = () => {
                   : ""
               }`}
             >
-
               <div className="placementOffProfileCardHeader">
 
                 <img
@@ -864,13 +919,13 @@ const PlacementOffProfile = () => {
                 <h3 className="placementOffProfileCardTitle">
                   Professional Information
                 </h3>
-
               </div>
 
               <div className="placementOffProfileFieldStack">
 
-                <div className="placementOffProfileField">
+               
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Employee Id
                   </span>
@@ -898,12 +953,11 @@ const PlacementOffProfile = () => {
                       {formData.employeeId}
                     </span>
                   )}
-
                 </div>
 
-               
-                <div className="placementOffProfileField">
+           
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Joined On
                   </span>
@@ -931,12 +985,11 @@ const PlacementOffProfile = () => {
                       {formData.joinedOn}
                     </span>
                   )}
-
                 </div>
 
-               
-                <div className="placementOffProfileField">
+              
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Designation
                   </span>
@@ -964,12 +1017,11 @@ const PlacementOffProfile = () => {
                       {formData.designation}
                     </span>
                   )}
-
                 </div>
 
-               
-                <div className="placementOffProfileField">
+                
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Experience
                   </span>
@@ -997,12 +1049,11 @@ const PlacementOffProfile = () => {
                       {formData.experience}
                     </span>
                   )}
-
                 </div>
 
-              
-                <div className="placementOffProfileField">
+               
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Institute Address
                   </span>
@@ -1034,12 +1085,10 @@ const PlacementOffProfile = () => {
                       }
                     </span>
                   )}
-
                 </div>
 
               </div>
             </div>
-
           </div>
 
 
@@ -1052,7 +1101,6 @@ const PlacementOffProfile = () => {
                   : ""
               }`}
             >
-
               <div className="placementOffProfileCardHeader">
 
                 <img
@@ -1064,15 +1112,11 @@ const PlacementOffProfile = () => {
                 <h3 className="placementOffProfileCardTitle">
                   Personal Information
                 </h3>
-
               </div>
 
-            
               <div className="placementOffProfileFieldGrid placementOffProfileFieldGridThree">
 
-             
                 <div className="placementOffProfileField">
-
                   <span className="placementOffProfileFieldLabel">
                     Name
                   </span>
@@ -1082,9 +1126,7 @@ const PlacementOffProfile = () => {
                       <input
                         type="text"
                         name="name"
-                        value={
-                          formData.name
-                        }
+                        value={formData.name}
                         onChange={handleChange}
                         className="placementOffProfileInput"
                       />
@@ -1100,12 +1142,9 @@ const PlacementOffProfile = () => {
                       {formData.name}
                     </span>
                   )}
-
                 </div>
 
-               
                 <div className="placementOffProfileField">
-
                   <span className="placementOffProfileFieldLabel">
                     Date of birth
                   </span>
@@ -1131,17 +1170,12 @@ const PlacementOffProfile = () => {
                     </>
                   ) : (
                     <span className="placementOffProfileFieldValue">
-                      {
-                        formData.dateOfBirth
-                      }
+                      {formData.dateOfBirth}
                     </span>
                   )}
-
                 </div>
 
-             
                 <div className="placementOffProfileField">
-
                   <span className="placementOffProfileFieldLabel">
                     Email
                   </span>
@@ -1151,9 +1185,7 @@ const PlacementOffProfile = () => {
                       <input
                         type="email"
                         name="email"
-                        value={
-                          formData.email
-                        }
+                        value={formData.email}
                         onChange={handleChange}
                         className="placementOffProfileInput"
                       />
@@ -1169,17 +1201,12 @@ const PlacementOffProfile = () => {
                       {formData.email}
                     </span>
                   )}
-
                 </div>
-
               </div>
 
-             
               <div className="placementOffProfileFieldGrid placementOffProfileFieldGridThree">
 
-                
                 <div className="placementOffProfileField">
-
                   <span className="placementOffProfileFieldLabel">
                     Gender
                   </span>
@@ -1188,9 +1215,7 @@ const PlacementOffProfile = () => {
                     <>
                       <select
                         name="gender"
-                        value={
-                          formData.gender
-                        }
+                        value={formData.gender}
                         onChange={handleChange}
                         className="placementOffProfileSelect"
                       >
@@ -1222,12 +1247,11 @@ const PlacementOffProfile = () => {
                       {formData.gender}
                     </span>
                   )}
-
                 </div>
 
-                
-                <div className="placementOffProfileField">
+              
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Phone no
                   </span>
@@ -1247,12 +1271,8 @@ const PlacementOffProfile = () => {
                           {COUNTRY_CODES.map(
                             (country) => (
                               <option
-                                key={
-                                  country.code
-                                }
-                                value={
-                                  country.code
-                                }
+                                key={country.code}
+                                value={country.code}
                               >
                                 {country.flag}{" "}
                                 {country.code}
@@ -1264,13 +1284,10 @@ const PlacementOffProfile = () => {
                         <input
                           type="text"
                           name="phone"
-                          value={
-                            formData.phone
-                          }
+                          value={formData.phone}
                           onChange={handleChange}
                           className="placementOffProfileInput"
                         />
-
                       </div>
 
                       {errors.phone && (
@@ -1287,16 +1304,14 @@ const PlacementOffProfile = () => {
                       {formData.phone}
                     </span>
                   )}
-
                 </div>
-
               </div>
 
-             
+            
+
               <div className="placementOffProfileFieldGrid placementOffProfileFieldGridOne">
 
                 <div className="placementOffProfileField">
-
                   <span className="placementOffProfileFieldLabel">
                     Address
                   </span>
@@ -1306,9 +1321,7 @@ const PlacementOffProfile = () => {
                       <input
                         type="text"
                         name="address"
-                        value={
-                          formData.address
-                        }
+                        value={formData.address}
                         onChange={handleChange}
                         className="placementOffProfileInput"
                       />
@@ -1324,11 +1337,9 @@ const PlacementOffProfile = () => {
                       {formData.address}
                     </span>
                   )}
-
                 </div>
 
               </div>
-
             </div>
 
             <div
@@ -1338,7 +1349,6 @@ const PlacementOffProfile = () => {
                   : ""
               }`}
             >
-
               <div className="placementOffProfileCardHeader">
 
                 <img
@@ -1350,14 +1360,13 @@ const PlacementOffProfile = () => {
                 <h3 className="placementOffProfileCardTitle">
                   Institute Details
                 </h3>
-
               </div>
 
-             
+            
+
               <div className="placementOffProfileFieldGrid placementOffProfileFieldGridOne">
 
                 <div className="placementOffProfileField">
-
                   <span className="placementOffProfileFieldLabel">
                     College/University
                   </span>
@@ -1367,9 +1376,7 @@ const PlacementOffProfile = () => {
                       <input
                         type="text"
                         name="college"
-                        value={
-                          formData.college
-                        }
+                        value={formData.college}
                         onChange={handleChange}
                         className="placementOffProfileInput"
                       />
@@ -1385,16 +1392,16 @@ const PlacementOffProfile = () => {
                       {formData.college}
                     </span>
                   )}
-
                 </div>
 
               </div>
 
-              
+
               <div className="placementOffProfileFieldGrid placementOffProfileFieldGridTwo">
 
-                <div className="placementOffProfileField">
+               
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Affiliated University
                   </span>
@@ -1426,12 +1433,11 @@ const PlacementOffProfile = () => {
                       }
                     </span>
                   )}
-
                 </div>
 
-             
-                <div className="placementOffProfileField">
+              
 
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Institution Website
                   </span>
@@ -1441,9 +1447,7 @@ const PlacementOffProfile = () => {
                       <input
                         type="text"
                         name="website"
-                        value={
-                          formData.website
-                        }
+                        value={formData.website}
                         onChange={handleChange}
                         className="placementOffProfileInput"
                       />
@@ -1459,17 +1463,14 @@ const PlacementOffProfile = () => {
                       {formData.website}
                     </span>
                   )}
-
                 </div>
 
               </div>
 
-            
               <div className="placementOffProfileFieldGrid placementOffProfileFieldGridTwo">
 
-              
+            
                 <div className="placementOffProfileField">
-
                   <span className="placementOffProfileFieldLabel">
                     Phone no
                   </span>
@@ -1489,12 +1490,8 @@ const PlacementOffProfile = () => {
                           {COUNTRY_CODES.map(
                             (country) => (
                               <option
-                                key={
-                                  country.code
-                                }
-                                value={
-                                  country.code
-                                }
+                                key={country.code}
+                                value={country.code}
                               >
                                 {country.flag}{" "}
                                 {country.code}
@@ -1512,7 +1509,6 @@ const PlacementOffProfile = () => {
                           onChange={handleChange}
                           className="placementOffProfileInput"
                         />
-
                       </div>
 
                       {errors.institutionPhone && (
@@ -1528,13 +1524,16 @@ const PlacementOffProfile = () => {
                       {
                         formData.institutionPhoneCountryCode
                       }{" "}
-                      {formData.institutionPhone}
+                      {
+                        formData.institutionPhone
+                      }
                     </span>
                   )}
-
                 </div>
-                <div className="placementOffProfileField">
 
+               
+
+                <div className="placementOffProfileField">
                   <span className="placementOffProfileFieldLabel">
                     Institution Address
                   </span>
@@ -1566,12 +1565,11 @@ const PlacementOffProfile = () => {
                       }
                     </span>
                   )}
-
                 </div>
 
               </div>
-
             </div>
+
 
             <div className="placementOffProfileCard placementOffProfileDocumentsCard">
 
@@ -1586,79 +1584,74 @@ const PlacementOffProfile = () => {
                 <h3 className="placementOffProfileCardTitle">
                   Documents
                 </h3>
-
               </div>
 
               <div className="placementOffProfileDocumentList">
 
                 {documents.length > 0 ? (
-                  documents.map(
-                    (document) => (
-                      <div
-                        className="placementOffProfileDocumentItem"
-                        key={document.id}
-                      >
+                  documents.map((document) => (
+                    <div
+                      className="placementOffProfileDocumentItem"
+                      key={document.id}
+                    >
 
-                        <div className="placementOffProfileDocumentInfo">
+                      <div className="placementOffProfileDocumentInfo">
 
-                          <img
-                            src={Employee}
-                            alt="Document"
-                            className="placementOffProfileDocumentIcon"
-                          />
+                        <img
+                          src={Employee}
+                          alt="Document"
+                          className="placementOffProfileDocumentIcon"
+                        />
 
-                          <span className="placementOffProfileDocumentName">
-                            {document.name}
-                          </span>
+                        <span className="placementOffProfileDocumentName">
+                          {document.name}
+                        </span>
+                      </div>
 
-                        </div>
+                      <div className="placementOffProfileDocumentActions">
 
-                        <div className="placementOffProfileDocumentActions">
+                        <button
+                          type="button"
+                          className="placementOffProfileViewButton"
+                          onClick={() =>
+                            handleViewDocument(
+                              document
+                            )
+                          }
+                        >
+                          View
+                        </button>
 
+                        {isEditing && (
                           <button
                             type="button"
-                            className="placementOffProfileViewButton"
+                            className="placementOffProfileDeleteButton"
                             onClick={() =>
-                              handleViewDocument(
-                                document
+                              handleDeleteDocument(
+                                document.id
                               )
                             }
                           >
-                            View
+                            Delete
                           </button>
-
-                          {isEditing && (
-                            <button
-                              type="button"
-                              className="placementOffProfileDeleteButton"
-                              onClick={() =>
-                                handleDeleteDocument(
-                                  document.id
-                                )
-                              }
-                            >
-                              Delete
-                            </button>
-                          )}
-
-                        </div>
-
+                        )}
                       </div>
-                    )
-                  )
+                    </div>
+                  ))
                 ) : (
-                  <p className="placementOffProfileNoDocuments">
+                  <div className="placementOffProfileDropdownEmpty">
                     No documents available.
-                  </p>
+                  </div>
                 )}
-
               </div>
+
+
               {isEditing && (
                 <div className="placementOffProfileAddDocument">
 
                   <label
                     htmlFor="placementOffProfileDocumentInput"
-                    className="placementOffProfileFieldLabel"
+                    className="placementOffProfileAddDocumentLabel"
                   >
                     + Add Document
                   </label>
@@ -1667,7 +1660,9 @@ const PlacementOffProfile = () => {
                     id="placementOffProfileDocumentInput"
                     type="file"
                     accept="application/pdf,image/jpeg,image/png"
-                    onChange={handleAddDocument}
+                    onChange={
+                      handleAddDocument
+                    }
                     className="placementOffProfileDocumentFileInput"
                   />
 
@@ -1676,15 +1671,12 @@ const PlacementOffProfile = () => {
                       {documentError}
                     </span>
                   )}
-
                 </div>
               )}
-
             </div>
-
           </div>
-
         </div>
+
 
         {isEditing && (
           <div className="placementOffProfileActions">
@@ -1707,7 +1699,6 @@ const PlacementOffProfile = () => {
 
           </div>
         )}
-
       </div>
     </main>
   );

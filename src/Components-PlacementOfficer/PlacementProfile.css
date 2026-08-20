@@ -1,5 +1,4 @@
 ﻿
-
 .placementOffProfileMain,
 .placementOffProfileMain *,
 .placementOffProfileMain *::before,
@@ -10,12 +9,17 @@
 .placementOffProfileMain {
   width: 100%;
   min-height: 100vh;
+  height: 100%;
+  min-width: 0;
+
   padding: 8px 16px 30px;
 
   overflow-x: hidden;
   overflow-y: auto;
 
   background: transparent;
+
+  color: #1c1233;
 
   font-family:
     "Inter",
@@ -26,8 +30,6 @@
     "Roboto",
     "Arial",
     sans-serif;
-
-  color: #1c1233;
 }
 
 .placementOffProfileContent {
@@ -35,7 +37,6 @@
   max-width: 1600px;
   margin: 0 auto;
 }
-
 
 .placementOffProfileHeader {
   width: 100%;
@@ -48,6 +49,7 @@
 
   margin-bottom: 20px;
 }
+
 
 
 .placementOffProfileSearchBar {
@@ -75,6 +77,8 @@
 .placementOffProfileSearchIcon {
   width: 18px;
   height: 18px;
+
+  display: block;
 
   object-fit: contain;
 
@@ -110,6 +114,7 @@
 .placementOffProfileSearchInput:focus {
   outline: none;
 }
+
 
 .placementOffProfileHeaderRight {
   display: flex;
@@ -171,7 +176,6 @@
   line-height: 1;
 }
 
-
 .placementOffProfileDropdownPanel {
   position: absolute;
 
@@ -183,6 +187,7 @@
 
   max-height: 280px;
 
+  overflow-x: hidden;
   overflow-y: auto;
 
   padding: 8px;
@@ -236,7 +241,6 @@
   font-size: 13px;
 }
 
-
 .placementOffProfileUser {
   display: flex;
   align-items: center;
@@ -281,6 +285,7 @@
   font-size: 13px;
   font-weight: 400;
 }
+
 
 .placementOffProfileTitleSection {
   width: 100%;
@@ -328,13 +333,12 @@
 .placementOffProfileLeftColumn,
 .placementOffProfileRightColumn {
   width: 100%;
+  min-width: 0;
 
   display: flex;
   flex-direction: column;
 
   gap: 20px;
-
-  min-width: 0;
 
   margin: 0;
   padding: 0;
@@ -435,6 +439,7 @@
   z-index: 1;
 }
 
+
 .placementOffProfilePhotoWrapper {
   position: absolute;
 
@@ -467,51 +472,6 @@
     0 4px 10px rgba(28, 18, 51, 0.18);
 }
 
-.placementOffProfileProfileCardName {
-  position: absolute;
-
-  left: 0;
-  right: 0;
-
-  bottom: 25px;
-
-  margin: 0;
-
-  text-align: center;
-
-  color: #1c1233;
-
-  font-size: 20px;
-  font-weight: 700;
-
-  line-height: 1.3;
-
-  z-index: 2;
-}
-
-.placementOffProfileProfileCardRole {
-  position: absolute;
-
-  left: 0;
-  right: 0;
-
-  bottom: 5px;
-
-  margin: 0;
-
-  text-align: center;
-
-  color: #6f2fd6;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  line-height: 1.3;
-
-  z-index: 2;
-}
-
-
 .placementOffProfilePhotoPlaceholder {
   display: flex;
   align-items: center;
@@ -524,10 +484,6 @@
 
 .placementOffProfilePhotoCircle.placementOffProfilePhotoPlaceholder {
   font-size: 44px;
-}
-
-.placementOffProfileUserImage.placementOffProfilePhotoPlaceholder {
-  font-size: 20px;
 }
 
 
@@ -582,6 +538,54 @@
 .placementOffProfilePhotoEditInput {
   display: none;
 }
+
+
+
+.placementOffProfileProfileCardName {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  bottom: 25px;
+
+  margin: 0;
+
+  text-align: center;
+
+  color: #1c1233;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  z-index: 2;
+}
+
+.placementOffProfileProfileCardRole {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  bottom: 5px;
+
+  margin: 0;
+
+  text-align: center;
+
+  color: #6f2fd6;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  line-height: 1.3;
+
+  z-index: 2;
+}
+
+
 
 .placementOffProfileEditButton {
   width: 206px;
@@ -660,6 +664,7 @@
 }
 
 
+
 .placementOffProfilePersonalCard {
   width: 100%;
   min-height: 246px;
@@ -697,6 +702,7 @@
 }
 
 
+
 .placementOffProfileFieldGrid {
   width: 100%;
 
@@ -731,6 +737,8 @@
 
   gap: 10px;
 }
+
+
 
 .placementOffProfileField {
   min-width: 0;
@@ -813,6 +821,12 @@
     0 0 0 3px rgba(139, 77, 222, 0.08);
 }
 
+.placementOffProfileProfessionalCard
+  .placementOffProfileInput {
+  width: 100%;
+  min-width: 0;
+}
+
 
 
 .placementOffProfilePhoneRow {
@@ -864,16 +878,28 @@
   line-height: 14px;
 }
 
+.placementOffProfileInput.input-error,
+.placementOffProfileSelect.input-error {
+  border-color: #d32f2f;
+
+  box-shadow:
+    0 0 0 3px rgba(211, 47, 47, 0.06);
+}
+
 
 .placementOffProfileEditingCard {
   height: auto !important;
+
   min-height: 246px;
 }
 
 .placementOffProfileProfessionalCard
-  .placementOffProfileInput {
-  width: 100%;
-  min-width: 0;
+  .placementOffProfileEditingCard {
+  height: auto !important;
+
+  min-height: 335px;
+
+  padding-bottom: 20px;
 }
 
 .placementOffProfileProfessionalCard.placementOffProfileEditingCard {
@@ -883,6 +909,7 @@
 
   padding-bottom: 20px;
 }
+
 
 
 .placementOffProfileDocumentsCard {
@@ -955,6 +982,8 @@
   word-break: break-word;
 }
 
+
+
 .placementOffProfileDocumentActions {
   display: flex;
   align-items: center;
@@ -963,7 +992,6 @@
 
   flex-shrink: 0;
 }
-
 
 .placementOffProfileViewButton,
 .placementOffProfileDeleteButton {
@@ -991,6 +1019,7 @@
 .placementOffProfileDeleteButton:hover {
   text-decoration: underline;
 }
+
 
 
 .placementOffProfileAddDocument {
@@ -1036,10 +1065,16 @@
   font-weight: 600;
 
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .placementOffProfileDocumentFileInput::file-selector-button:hover {
   background: #eee6fa;
+
+  border-color: #b99be8;
 }
 
 
@@ -1099,6 +1134,7 @@
   border-color: #9c6fe4;
 }
 
+
 .placementOffProfileSaveButton {
   border: none;
 
@@ -1123,6 +1159,47 @@
 
 .placementOffProfileSaveButton:active {
   transform: translateY(0);
+}
+
+
+.placementOffProfileSuccessMessage {
+  width: 100%;
+
+  margin: 10px 0;
+
+  padding: 10px 14px;
+
+  border: 1px solid #b7e4c7;
+  border-radius: 8px;
+
+  background: #eaf8ef;
+
+  color: #237a3b;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  line-height: 1.4;
+}
+
+.placementOffProfileErrorMessage {
+  width: 100%;
+
+  margin: 10px 0;
+
+  padding: 10px 14px;
+
+  border: 1px solid #f0b7b7;
+  border-radius: 8px;
+
+  background: #fff0f0;
+
+  color: #d32f2f;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  line-height: 1.4;
 }
 
 @media (min-width: 1400px) {
@@ -1161,9 +1238,22 @@
     min-height: 0;
   }
 
+  .placementOffProfileDocumentsCard {
+    width: 100%;
+  }
+
   .placementOffProfileProfileCard {
     width: 100%;
     max-width: 400px;
+  }
+
+  .placementOffProfileProfileCardImage {
+    width: 100%;
+  }
+
+  .placementOffProfileEditButton {
+    width: 100%;
+    max-width: 300px;
   }
 
   .placementOffProfileSearchBar {
@@ -1171,6 +1261,7 @@
     max-width: 569px;
   }
 }
+
 
 @media (max-width: 1000px) {
   .placementOffProfileHeader {
@@ -1202,6 +1293,7 @@
 
   .placementOffProfileHeader {
     flex-direction: column;
+
     align-items: stretch;
 
     gap: 16px;
@@ -1239,6 +1331,7 @@
     min-height: auto;
   }
 }
+
 
 @media (max-width: 700px) {
   .placementOffProfileMain {
@@ -1294,6 +1387,7 @@
     right: -70px;
   }
 }
+
 
 @media (max-width: 600px) {
   .placementOffProfileHeaderRight {
@@ -1529,6 +1623,7 @@
 
   .placementOffProfileProfileCardName {
     font-size: 17px;
+
     bottom: 25px;
   }
 
@@ -1538,6 +1633,7 @@
 
   .placementOffProfileDocumentItem {
     flex-direction: column;
+
     align-items: stretch;
   }
 
@@ -1547,6 +1643,7 @@
 
   .placementOffProfileDropdownPanel {
     right: -45px;
+
     width: 220px;
   }
 }
