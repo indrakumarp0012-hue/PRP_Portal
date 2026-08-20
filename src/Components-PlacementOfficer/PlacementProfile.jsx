@@ -14,46 +14,14 @@ import Employee from "../assets/PlacementProfileAssets/Employee.png";
 
 
 const COUNTRY_CODES = [
-  {
-    code: "+91",
-    flag: "🇮🇳",
-    label: "India",
-  },
-  {
-    code: "+1",
-    flag: "🇺🇸",
-    label: "USA/Canada",
-  },
-  {
-    code: "+44",
-    flag: "🇬🇧",
-    label: "UK",
-  },
-  {
-    code: "+61",
-    flag: "🇦🇺",
-    label: "Australia",
-  },
-  {
-    code: "+971",
-    flag: "🇦🇪",
-    label: "UAE",
-  },
-  {
-    code: "+65",
-    flag: "🇸🇬",
-    label: "Singapore",
-  },
-  {
-    code: "+49",
-    flag: "🇩🇪",
-    label: "Germany",
-  },
-  {
-    code: "+81",
-    flag: "🇯🇵",
-    label: "Japan",
-  },
+  {code: "+91",flag: "🇮🇳", label: "India",},
+  {code: "+1",flag: "🇺🇸",label: "USA/Canada",},
+  {code: "+44",flag: "🇬🇧",label: "UK", },
+  {code: "+61",flag: "🇦🇺",label: "Australia",},
+  {code: "+971",flag: "🇦🇪",label: "UAE",},
+  {code: "+65",flag: "🇸🇬",label: "Singapore",},
+  {code: "+49",flag: "🇩🇪",label: "Germany",},
+  { code: "+81", flag: "🇯🇵",label: "Japan", },
 ];
 
 const initialFormData = {
@@ -85,59 +53,25 @@ const initialFormData = {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const PHONE_REGEX = /^\+?[\d\s()-]{7,20}$/;
-
-const WEBSITE_REGEX =
-  /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
-
-
-const ALLOWED_DOCUMENT_TYPES = [
-  "application/pdf",
-  "image/jpeg",
-  "image/png",
-];
-
-const ALLOWED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-];
-
+const WEBSITE_REGEX = /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+const ALLOWED_DOCUMENT_TYPES = [ "application/pdf", "image/jpeg", "image/png",];
+const ALLOWED_IMAGE_TYPES = ["image/jpeg","image/png",];
 
 const initialDocuments = [
-  {
-    id: 1,
-    name: "Employee ID Card",
-    fileName: "Employee_ID_Card.pdf",
-  },
-  {
-    id: 2,
-    name: "Appointment Letter",
-    fileName: "Appointment_Letter.pdf",
-  },
-  {
-    id: 3,
-    name: "Certificates",
-    fileName: "Certificates.pdf",
-  },
+  {id: 1,name: "Employee ID Card",fileName: "Employee_ID_Card.pdf",},
+  {id: 2,name: "Appointment Letter",fileName: "Appointment_Letter.pdf", },
+  {id: 3,name: "Certificates",fileName: "Certificates.pdf",},
 ];
 
 
 const initialNotifications = [
-  {
-    id: 1,
-    text: "New placement drive scheduled for Aug 20.",
-  },
-  {
-    id: 2,
-    text: "3 students updated their resumes.",
-  },
+  {id: 1,text: "New placement drive scheduled for Aug 20.",},
+  {id: 2,text: "3 students updated their resumes.",},
 ];
 
 
 const initialMessages = [
-  {
-    id: 1,
-    text: "HR Manager: Please confirm interview slots.",
-  },
+  {id: 1,text: "HR Manager: Please confirm interview slots.",},
 ];
 
 
@@ -255,7 +189,7 @@ const PlacementOffProfile = () => {
 
 
   const committedProfileImage =
-  
+
     isProfilePictureDeleted
       ? null
       : profilePicture;
