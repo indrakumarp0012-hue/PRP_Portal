@@ -61,16 +61,9 @@ const PHONE_REGEX =
 const WEBSITE_REGEX =
   /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
 
-const ALLOWED_DOCUMENT_TYPES = [
-  "application/pdf",
-  "image/jpeg",
-  "image/png",
-];
+const ALLOWED_DOCUMENT_TYPES = ["application/pdf","image/jpeg","image/png",];
 
-const ALLOWED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-];
+const ALLOWED_IMAGE_TYPES = ["image/jpeg","image/png",];
 
 
 const initialDocuments = [
@@ -85,10 +78,7 @@ const initialNotifications = [
 ];
 
 const initialMessages = [
-  {
-    id: 1,
-    text: "HR Manager: Please confirm interview slots.",
-  },
+  {id: 1,text: "HR Manager: Please confirm interview slots.",},
 ];
 
 const PlacementOffProfile = ({ currentUser }) => {
